@@ -5,7 +5,8 @@ local recycleList = {
 	"intermedium",
 	"faraday",
 	"boron",
-	"manasteel"
+	"manasteel",
+	"iron"
 }
 
 local trashList = {
