@@ -54,6 +54,17 @@ function isRecycleable(name)
 	return "default"
 end
 
+function drop( fn )
+	local hasDropped = fn(64);
+	if (hasDropped == false) then
+		print("Please empty the fucking chest");
+
+		while fn(64) == false do
+			os.sleep(1);
+		end
+	end
+end
+
 while true do 
 	local itemName = drainAndInspect();
 
@@ -65,37 +76,14 @@ while true do
 
 		if canRecycle == "default" then
 			print("storing");
-			local hasDropped = turtle.dropUp(64)
-
-			if (hasDropped == false) then
-				print("Please empty the fucking chest");
-				while turtle.dropUp(64) == false do
-					os.sleep(1);
-				end
-			end
+			drop(turtle.dropUp);
 		elseif canRecycle == "recycle" then
 			print("recycling");
-			local hasDropped = turtle.dropDown(64);
-
-			if (hasDropped == false) then
-				print("Please empty the fucking chest");
-	
-				while turtle.dropDown(64) == false do
-					os.sleep(1);
-				end
-			end
+			drop(turtle.dropDown);
 		else
 			print("trashing");
 			turtle.turnLeft();
-			local hasDropped = turtle.drop(64);
-
-			if (hasDropped == false) then
-				print("Please empty the fucking chest");	
-
-				while turtle.drop(64) == false do
-					os.sleep(1);
-				end
-			end
+			drop(turtle.drop);
 			turtle.turnRight();
 		end
 	end
