@@ -10,8 +10,7 @@ local recycleList = {
 	"golden_",
 	"steeleaf",
 	"elementium",
-	"_tough",
-	"nano_"
+	"_tough"
 }
 
 local trashList = {
@@ -19,7 +18,8 @@ local trashList = {
 	"manaweave",
 	"tconstruct",
 	"bow",
-	"chain"
+	"chain",
+	"nano_"
 }
 
 function drainAndInspect()
