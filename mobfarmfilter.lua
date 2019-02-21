@@ -11,7 +11,8 @@ local recycleList = {
 	"steeleaf",
 	"elementium",
 	"_tough",
-	"knightmetal"
+	"knightmetal",
+	"prudentium"
 }
 
 local trashList = {
@@ -21,7 +22,8 @@ local trashList = {
 	"bow",
 	"chain",
 	"nano_",
-	"psimetal"
+	"psimetal",
+	"_flux"
 }
 
 function drainAndInspect()
