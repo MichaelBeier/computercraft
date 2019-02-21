@@ -20,7 +20,8 @@ local trashList = {
 	"tconstruct",
 	"bow",
 	"chain",
-	"nano_"
+	"nano_",
+	"psimetal"
 }
 
 function drainAndInspect()
