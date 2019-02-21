@@ -10,7 +10,8 @@ local recycleList = {
 	"golden_",
 	"steeleaf",
 	"elementium",
-	"_tough"
+	"_tough",
+	"knightmetal"
 }
 
 local trashList = {
