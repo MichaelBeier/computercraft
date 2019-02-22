@@ -1,7 +1,6 @@
 local recipes = {
-    {"actuallyadditions:block_crystal", "ic2:plate", "tconstruct:ingots", "tconstruct:slime_congealed", "biomesoplenty:gem" } --empowered palis
-
-
+	{"actuallyadditions:block_crystal", "ic2:plate", "tconstruct:ingots", "tconstruct:slime_congealed", "biomesoplenty:gem" }, --empowered palis
+	{"mekanism:atomicalloy", "mekanism:controlcircuit", "mekanism:controlcircuit", "mekanism:controlcircuit", "mekanism:controlcircuit"}, --ultimate control circuit
 }
 
 function checkForRecipe()
