@@ -23,7 +23,9 @@ local trashList = {
 	"chain",
 	"nano_",
 	"psimetal",
-	"_flux"
+	"_flux",
+	"diamond",
+	"stone"
 }
 
 function drainAndInspect()
@@ -73,25 +75,31 @@ function drop( fn )
 end
 
 while true do 
-	local itemName = drainAndInspect();
+	for i=1,16 do
+		turtle.select(i);
+		if(turtle.getItemCount(i) == 0) then
+			itemName = false
+		else 
+			local data = turtle.getItemDetail(i);
+			itemName = data.name;
+		end
 
-	if itemName == false then
-		os.sleep(1)
-	else
-		print(itemName);
-		local canRecycle = isRecycleable(itemName);
-
-		if canRecycle == "default" then
-			print("storing");
-			drop(turtle.dropUp);
-		elseif canRecycle == "recycle" then
-			print("recycling");
-			drop(turtle.dropDown);
+		if itemName == false then
+			os.sleep(0)
 		else
-			print("trashing");
-			turtle.turnLeft();
-			drop(turtle.drop);
-			turtle.turnRight();
+			print(itemName);
+			local canRecycle = isRecycleable(itemName);
+
+			if canRecycle == "default" then
+				print("storing");
+				drop(turtle.dropUp);
+			elseif canRecycle == "recycle" then
+				print("recycling");
+				drop(turtle.dropDown);
+			else
+				print("trashing");
+				drop(turtle.drop);
+			end
 		end
 	end
 end
