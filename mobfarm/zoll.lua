@@ -52,6 +52,7 @@ function analyzeContent()
         end
 
         if not stacked then
+            print("not stacked");
             table.insert(content, {itemName, itemCount});
         end
     end
