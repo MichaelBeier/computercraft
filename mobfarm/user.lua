@@ -70,6 +70,7 @@ function run(config)
 			{name = "Wither Skeleton", id = "wither", active = false},
 			{name = "Wither Skeleton", id = "wither", active = false}
 		},
+		jobs = {},
 		page = 1
 	}
 
@@ -95,6 +96,8 @@ end
 function setupPeripherals(config)
 	local selectorMonitor = peripheral.wrap(config.selectorMonitor)
 	local loggerMonitor = peripheral.wrap(config.loggerMonitor)
+
+	rednet.open("left")
 
 	return {
 		selectorMonitor = selectorMonitor,
