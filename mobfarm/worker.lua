@@ -146,7 +146,9 @@ function unloadJob()
 end
 
 function loadJob()
-    chest.pushItems(spawnerLocation, currentJob[1], 1);
+    if currentJob[1] ~= 0 then
+        chest.pushItems(spawnerLocation, currentJob[1], 1);
+    end
 end
 
 function moveToFront()
