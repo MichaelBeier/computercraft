@@ -7,6 +7,8 @@ function run(config)
 		}
 	}
 
+	interface.render(state)
+
 	while true do
 		local eventType, arg1, arg2, arg3, arg4 = os.pullEvent()
 
@@ -17,7 +19,7 @@ function run(config)
 		-- TODO: handle events which are being triggered by a click onto a mob on the monitor
 		end
 
-		interface.render()
+		interface.render(state)
 	end
 end
 
@@ -67,7 +69,6 @@ function createSelectionRenderer(monitor)
 		monitor.clear()
 		monitor.setCursorPos(0, 0)
 
-		paintutils.drawBox(0, 0, sizeX, 3, colors.white)
 		writeInColor(monitor, "Krasse Mobfarm", colors.lime)
 	end
 
@@ -97,11 +98,11 @@ function createLoggerRenderer(monitor)
 	}
 end
 
-function writeInColor(term, text, color)
-	local originalColor = term.getTextColor()
-	term.setTextColor(color)
-	term.write(text)
-	term.setTextColor(originalColor)
+function writeInColor(output, text, color)
+	local originalColor = output.getTextColor()
+	output.setTextColor(color)
+	output.write(text)
+	output.setTextColor(originalColor)
 end
 
 run(
