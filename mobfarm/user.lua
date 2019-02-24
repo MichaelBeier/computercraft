@@ -143,13 +143,13 @@ function createInterface(config, peripherals)
 	local loggerMonitor = peripherals.loggerMonitor
 
 	local selectionRenderer = createSelectionRenderer(selectorMonitor)
-	local loggerRenderer = createLoggerRenderer(loggerMonitor)
+	-- local loggerRenderer = createLoggerRenderer(loggerMonitor)
 
 	function render(state)
 		term.redirect(selectorMonitor)
 		selectionRenderer.render(state)
-		term.redirect(loggerMonitor)
-		loggerRenderer.render(state)
+		-- term.redirect(loggerMonitor)
+		-- loggerRenderer.render(state)
 		term.redirect(term.native())
 	end
 
@@ -157,7 +157,7 @@ function createInterface(config, peripherals)
 		if side == config.selectorMonitor then
 			return selectionRenderer.handleMouseClick(state, x, y)
 		elseif side == config.loggerMonitor then
-			return loggerRenderer.handleMouseClick(state, x, y)
+		-- return loggerRenderer.handleMouseClick(state, x, y)
 		end
 	end
 
@@ -356,6 +356,8 @@ function createLoggerRenderer(monitor)
 	local listEntrySpacing = 1
 
 	function render(state)
+		monitor.setBackgroundColor(colors.black)
+		monitor.clear()
 		local sizeX, sizeY = monitor.getSize()
 		renderHeader(state, sizeX, sizeY)
 		renderList(state, sizeX, sizeY)
