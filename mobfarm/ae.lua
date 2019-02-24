@@ -69,7 +69,7 @@ function sendContentUpdate(content)
     local messageTable = content;
     
     for i=1, #messageTable do
-        messageTable[i][1] = getID(messageTable[i][1]); 
+        messageTable[i][2] = getID(messageTable[i][2]); 
     end
 
     for i=1, #messageTable do
@@ -115,7 +115,7 @@ function analyzeContent()
         end
 
         if not stacked then
-            table.insert(content, {itemName, itemCount});
+            table.insert(content, {"AE",itemName, itemCount});
         end
     end
 
