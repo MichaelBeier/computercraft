@@ -103,8 +103,8 @@ function createSelectionRenderer(monitor)
 		local longestName
 
 		for i = 1, #state.mobs do
-			if longestName == nil or string.len(state.mobs[i]) > string.len(longestName) then
-				longestName = state.mobs[i]
+			if longestName == nil or string.len(state.mobs[i].name) > string.len(longestName) then
+				longestName = state.mobs[i].name
 			end
 		end
 
