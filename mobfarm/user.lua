@@ -135,7 +135,7 @@ function createSelectionRenderer(monitor)
 	local minListPadding = 1
 	local buttonWidth = 16
 	local buttonSpacing = 1
-	local buttonHeight = 1
+	local buttonHeight = 3
 
 	function render(state)
 		local sizeX, sizeY = monitor.getSize()
@@ -206,7 +206,7 @@ function createSelectionRenderer(monitor)
 
 				monitor.setCursorPos(colStartX, yPos)
 				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth - 1, yPos + buttonHeight - 1, colors.lime)
-				monitor.setCursorPos(colStartX + textStart, yPos)
+				monitor.setCursorPos(colStartX + textStart, yPos + math.floor(button.height / 2))
 				writeInColor(monitor, text, colors.white, colors.lime)
 			end
 
