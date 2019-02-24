@@ -77,7 +77,7 @@ function createControllerCommunicator(config)
 					newJobs,
 					{
 						name = jobData[3],
-						jobId = jobData[3],
+						id = jobData[3],
 						requested = jobData[2],
 						done = jobData[4]
 					}
@@ -369,6 +369,7 @@ function createLoggerRenderer(monitor)
 
 	local renderFooter = function(state, sizeX, sizeY)
 		local startPosY = sizeY - footerHeight + 1
+		monitor.setCursorPos(1, startPosY)
 
 		drawFilledBox(monitor, 1, startPosY, sizeX, footerHeight, colors.white)
 	end
