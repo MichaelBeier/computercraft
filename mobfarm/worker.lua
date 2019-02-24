@@ -101,7 +101,7 @@ function getJob()
     local job = textutils.unserialize(answer);
     table.remove(job,1); -- we dont need priority
 
-    print(job[1] .. job[2]);
+    print(job[1]);
     return translateJob(job);
 end
 
@@ -113,7 +113,7 @@ function translateJob(job)
         return nil
     end
 
-    return {slot, job[2]};
+    return {slot};
 end
 
 function findSlot(text)
