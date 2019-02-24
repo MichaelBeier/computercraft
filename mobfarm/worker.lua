@@ -39,7 +39,7 @@ function findOldItemPlace()
     for key, value in pairs(chestContent) do
         
         if key ~= oldKey+1 then
-            return oldKey;
+            return key-1;
         end
 
         oldKey = key;
