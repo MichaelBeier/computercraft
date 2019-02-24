@@ -23,9 +23,10 @@ function processMessage(message, protocol)
             local translated = translateJob(job);
             for i=1, #jobs do
                 if jobs[i][1] > translated[1] then
-                    table.insert(jobs, i, translated);
+                    return table.insert(jobs, i, translated);
                 end
             end
+            return table.insert(jobs, translated);
         end
     elseif protocol == "currentJob" then
         if #jobs > 0 then
