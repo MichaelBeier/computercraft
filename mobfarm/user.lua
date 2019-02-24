@@ -258,10 +258,10 @@ function createSelectionRenderer(monitor)
 			table.insert(
 				buttons,
 				{
-					startPosX = 2,
-					startPosY = startPosY + 1,
-					endPosX = 2 + string.len("Previous"),
-					endPosY = startPosY + 1,
+					startPosX = 1,
+					startPosY = startPosY,
+					endPosX = 2 + string.len("Previous") + 1,
+					endPosY = startPosY + 2,
 					key = "previous"
 				}
 			)
@@ -274,10 +274,10 @@ function createSelectionRenderer(monitor)
 			table.insert(
 				buttons,
 				{
-					startPosX = sizeX - textLength - 2,
-					startPosY = startPosY + 1,
-					endPosX = sizeX - 2,
-					endPosY = startPosY + 1,
+					startPosX = sizeX - textLength - 2 - 1,
+					startPosY = startPosY,
+					endPosX = sizeX - 1,
+					endPosY = startPosY + 2,
 					key = "next"
 				}
 			)
