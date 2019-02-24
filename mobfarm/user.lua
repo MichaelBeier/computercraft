@@ -84,6 +84,9 @@ function run(config)
 		if eventType == "mob_click" then
 			print("mob click", arg1)
 		end
+		if eventType == "change_page" then
+			state.page = arg1
+		end
 
 		interface.render(state)
 	end
@@ -129,7 +132,7 @@ function createInterface(config, peripherals)
 end
 
 function createSelectionRenderer(monitor)
-	local mobButtons = {}
+	local buttons = {}
 	local headerHeight = 3
 	local footerHeight = 3
 	local minListPadding = 1
@@ -137,6 +140,7 @@ function createSelectionRenderer(monitor)
 	local buttonSpacing = 1
 	local buttonHeight = 3
 	local pageCount = 1
+	local startPosX
 
 	function render(state)
 		monitor.setBackgroundColor(colors.black)
@@ -151,7 +155,7 @@ function createSelectionRenderer(monitor)
 	function renderHeader(state, sizeX)
 		monitor.setCursorPos(1, 1)
 		drawFilledBox(monitor, 1, 1, sizeX, 3, colors.white)
-		monitor.setCursorPos(1, 2)
+		monitor.setCursorPos(startPosX, 2)
 		writeInColor(monitor, "Krasse Mobfarm", colors.lime, colors.white)
 		monitor.setCursorPos(1, 1 + headerHeight)
 	end
@@ -187,15 +191,17 @@ function createSelectionRenderer(monitor)
 
 		local _, listSpaceStartY = monitor.getCursorPos()
 		local startPosY = listSpaceStartY + math.max(minListPadding, math.floor(remainingYSpace / 2))
-		local startPosX = math.max(minListPadding, math.floor(remainingXSpace / 2))
+		startPosX = math.max(minListPadding, math.floor(remainingXSpace / 2))
 
 		advanceLines(monitor, minListPadding)
+
+		local itemStartIndex = (state.page - 1) * pageCount
 
 		for rowIndex = 1, rowCount do
 			local _, yPos = monitor.getCursorPos()
 
 			for colIndex = 1, colCount do
-				local mob = state.mobs[(rowIndex - 1) * rowCount + colIndex]
+				local mob = state.mobs[(rowIndex - 1) * rowCount + colIndex + itemStartIndex]
 
 				if (mob == nil) then
 					break
@@ -217,7 +223,7 @@ function createSelectionRenderer(monitor)
 				writeInColor(monitor, text, colors.white, colors.lime)
 
 				table.insert(
-					mobButtons,
+					buttons,
 					{
 						startX = colStartX,
 						startY = yPos,
@@ -245,16 +251,56 @@ function createSelectionRenderer(monitor)
 
 		monitor.setCursorPos(textStart, startPosY + 1)
 		writeInColor(monitor, pageText, colors.black, colors.white)
+
+		if (state.page > 1) then
+			monitor.setCursorPos(2, startPosY + 1)
+			writeInColor(monitor, "Previous", colors.black, colors.white)
+			table.insert(
+				buttons,
+				{
+					startPosX = 2,
+					startPosY = startPosY + 1,
+					endPosX = 2 + string.len("Previous"),
+					endPosY = startPosY + 1,
+					key = "previous"
+				}
+			)
+		end
+		if (state.page < pageCount) then
+			local text = "next"
+			local textLength = string.len(text)
+			monitor.setCursorPos(sizeX - textLength - 2, startPosY + 1)
+			writeInColor(monitor, "Next", colors.black, colors.white)
+			table.insert(
+				buttons,
+				{
+					startPosX = sizeX - textLength - 2,
+					startPosY = startPosY + 1,
+					endPosX = sizeX - 2,
+					endPosY = startPosY + 1,
+					key = "next"
+				}
+			)
+		end
 	end
 
 	function handleMouseClick(x, y)
-		local mob = findButton(mobButtons, x, y)
+		local buttonKey = findButton(buttons, x, y)
 
-		if (mob == nil) then
+		if (buttonKey == nil) then
 			return
 		end
 
-		os.queueEvent("mob_click", mob)
+		if (buttonKey == "next") then
+			os.queueEvent("change_page", math.min(state.page + 1, pageCount))
+			return
+		end
+
+		if (buttonKey == "previous") then
+			os.queueEvent("change_page", math.max(state.page - 1, 1))
+		end
+
+		os.queueEvent("mob_click", buttonKey)
 	end
 
 	return {
