@@ -108,18 +108,38 @@ function createSelectionRenderer(monitor)
 		local startPosY = listSpaceStartY + math.max(minListPadding, math.floor(remainingYSpace / 2))
 		local startPosX = math.max(minListPadding, math.floor(remainingXSpace / 2))
 
-		print(
-			"startPosX",
-			startPosX,
-			"startPosY",
-			startPosY,
-			"pageCount",
-			pageCount,
-			"colCount",
-			colCount,
-			"rowCount",
-			rowCount
-		)
+		for rowIndex = 1, #rowCount do
+			local _, yPos = monitor.getCursorPos()
+
+			for colIndex = 1, #colCount do
+				local mob = state.mobs[rowCount * rowIndex + colIndex]
+
+				if (mob == nil) then
+					break
+				end
+
+				local colStartX = startPosX + (colCount - 1) * (buttonWidth + buttonSpacing)
+
+				monitor.setCursorPos(colStartX, yPos)
+				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth, yPos + buttonHeight, colors.lime)
+				writeInColor(monitor, mob.name, "white")
+			end
+
+			advanceLines(buttonHeight + buttonSpacing)
+		end
+
+		-- print(
+		-- 	"startPosX",
+		-- 	startPosX,
+		-- 	"startPosY",
+		-- 	startPosY,
+		-- 	"pageCount",
+		-- 	pageCount,
+		-- 	"colCount",
+		-- 	colCount,
+		-- 	"rowCount",
+		-- 	rowCount
+		-- )
 	end
 
 	function handleMouseClick(x, y)
@@ -175,6 +195,11 @@ function drawFilledBox(output, startX, startY, endX, endY, colors)
 
 	term.setBackgroundColor(originalBackground)
 	term.redirect(originalTerminal)
+end
+
+function advanceLines(count)
+	local _, y = monitor.getCursorPos()
+	monitor.setCursorPos(1, y + count)
 end
 
 run(
