@@ -101,11 +101,25 @@ function createSelectionRenderer(monitor)
 
 		local pageCount = math.ceil(#state.mobs / colCount / rowCount)
 
-		print("colCount", colCount, "rowCount", rowCount, "pageCount", pageCount)
+		local remainingXSpace = availableXSpace + buttonSpacing - (colCount * (buttonWidth + buttonSpacing))
+		local remainingYSpace = availableYSpace + buttonSpacing - (rowCount * (buttonHeight + buttonSpacing))
 
 		local _, listSpaceStartY = monitor.getCursorPos()
-		local startPosY = listSpaceStartY + minListPadding
-		local startPosX = 1 + minListPadding
+		local startPosY = listSpaceStartY + math.max(minListPadding, math.floor(remainingYSpace / 2))
+		local startPosX = math.max(minListPadding, math.floor(remainingXSpace / 2))
+
+		print(
+			"startPosX",
+			startPosX,
+			"startPosY",
+			startPosY,
+			"pageCount",
+			pageCount,
+			"colCount",
+			colCount,
+			"rowCount",
+			rowCount
+		)
 	end
 
 	function handleMouseClick(x, y)
