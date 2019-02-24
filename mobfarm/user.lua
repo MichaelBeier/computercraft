@@ -3,9 +3,7 @@ function run(config)
 	local interface = createInterface(config, peripherals)
 	local controllerCommunicator = createControllerCommunicator(config)
 	local state = {
-		selectionItems = {
-			{name = "Wither Skeleton", id = "wither", active = true}
-		},
+		selectionItems = {},
 		jobs = {},
 		page = 1
 	}
