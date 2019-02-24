@@ -33,6 +33,11 @@ function processMessage(message, protocol)
     end
 end
 
+function translateJob(job)
+    local translated = job;
+    translated[1] = priomapping[job[1]];
+end
+
 function getPrio(text)
     for i = 1, #priomapping do
         if priomapping[i] == text then
@@ -44,6 +49,7 @@ end
 
 startup();
 while true do
+    print(textutils.serialize(jobs));
     local senderID, message, protocol = rednet.receive()
 
     local response = processMessage(message, protocol);
