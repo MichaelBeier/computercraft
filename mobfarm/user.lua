@@ -61,6 +61,14 @@ function createSelectionRenderer(monitor)
 	local buttons
 
 	function render(state)
+		local sizeX, sizeY = monitor.getSize()
+
+		monitor.setBackgroundColor(0x000000)
+		monitor.clear()
+		monitor.setCursorPos(0, 0)
+
+		paintutils.drawBox(0, 0, sizeX, 3, 0xffffff)
+		writeInColor(monitor, "Krasse Mobfarm", 0x00ff00)
 	end
 
 	function handleMouseClick(x, y)
@@ -87,6 +95,13 @@ function createLoggerRenderer(monitor)
 		render = render,
 		handleMouseClick = handleMouseClick
 	}
+end
+
+function writeInColor(term, text, color)
+	local originalColor = term.getTextColor()
+	term.setTextColor(color)
+	term.write(text)
+	term.setTextColor(originalColor)
 end
 
 run(
