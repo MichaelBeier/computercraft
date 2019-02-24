@@ -39,7 +39,7 @@ function createConfig()
 end
 
 function download(url)
-	local httpResponse = http.get(config.url)
+	local httpResponse = http.get(url)
 
 	local statusCode = httpResponse.getResponseCode()
 
