@@ -108,8 +108,8 @@ function analyzeContent()
         local stacked = false
 
         for j=1, #content do
-            if content[j][1] == itemName then
-                content[j][2] = content[j][2] + itemCount;
+            if content[j][2] == itemName then
+                content[j][3] = content[j][3] + itemCount;
                 stacked = true;
             end
         end
