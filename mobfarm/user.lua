@@ -71,14 +71,7 @@ function run(config)
 			{name = "Wither Skeleton", id = "wither", active = false},
 			{name = "Wither Skeleton", id = "wither", active = false}
 		},
-		jobs = {
-			{
-				name = "Wither Skeleton",
-				jobId = "a",
-				requested = 64,
-				done = 10
-			}
-		},
+		jobs = {},
 		page = 1
 	}
 
@@ -98,9 +91,8 @@ function run(config)
 		elseif eventType == "monitor_resize" then
 			interface.render(state)
 		elseif eventType == "rednet_message" then
-			if (controllerCommunicator.handleRednetMessage(state, arg1, arg3, arg2)) then
-				interface.render(state)
-			end
+			controllerCommunicator.handleRednetMessage(state, arg1, arg2)
+			interface.render(state)
 		elseif eventType == "timer" then
 			controllerCommunicator.sendDataRequest()
 		end
@@ -110,55 +102,15 @@ function run(config)
 end
 
 function createControllerCommunicator(config)
-	local controllerId = rednet.lookup(config.protocols.createJob)
-
 	function sendDataRequest()
-		rednet.send(controllerId, config.protocols.queryJobs)
+		print("sending data request")
 	end
 
 	function sendJobRequest(key, count)
-		rednet.send(
-			controllerId,
-			config.protocols.createJob,
-			{
-				"user",
-				64,
-				key
-			}
-		)
+		print("sending job request", key)
 	end
 
-	function handleRednetMessage(state, senderId, protocol, message)
-		if (senderId ~= controllerId or message == nil) then
-			return false
-		end
-
-		local data = textutils.deserialize(message)
-
-		if (protocol == config.protocols.queryJobs) then
-			local newJobs = {}
-
-			for i = 1, #data do
-				local jobData = data[i]
-
-				table.insert(
-					newJobs,
-					{
-						name = jobData[3],
-						jobId = jobData[3],
-						requested = 64,
-						done = 0
-					}
-				)
-			end
-
-			state.jobs = newJobs
-			print("jobs", textutils.serialize(newJobs))
-
-			return true
-		end
-
-		return false
+	function handleRednetMessage(state, senderId, message)
 	end
 
 	return {
@@ -209,11 +161,10 @@ function createInterface(config, peripherals)
 	}
 end
 
-local headerHeight = 3
-local footerHeight = 3
-
 function createSelectionRenderer(monitor)
 	local buttons = {}
+	local headerHeight = 3
+	local footerHeight = 3
 	local minListPadding = 1
 	local buttonWidth = 16
 	local buttonSpacing = 1
@@ -392,34 +343,9 @@ function createSelectionRenderer(monitor)
 end
 
 function createLoggerRenderer(monitor)
-	local buttons = {}
-	local listEntryHeight = 1
-	local minListPadding = 1
-	local listEntrySpacing = 1
+	local buttons
 
 	function render(state)
-		local sizeX, sizeY = monitor.getSize()
-		renderHeader(state, sizeX, sizeY)
-		renderList(state, sizeX, sizeY)
-		renderFooter(state, sizeX, sizeY)
-	end
-
-	function renderHeader(state, sizeX, sizeY)
-		drawFilledBox(monitor, 1, 1, sizeX, headerHeight, colors.white)
-	end
-
-	function renderList(state, sizeX, sizeY)
-		monitor.setCursorPos(1, headerHeight + 2)
-
-		local availableYSpace = sizeY - headerHeight - footerHeight - minListPadding * 2
-
-		local rowCount = math.floor(availableYSpace)
-	end
-
-	function renderFooter(state, sizeX, sizeY)
-		local startPosY = sizeY - footerHeight + 1
-
-		drawFilledBox(monitor, 1, startPosY, sizeX, footerHeight)
 	end
 
 	function handleMouseClick(state, x, y)
@@ -482,11 +408,6 @@ end
 run(
 	{
 		selectorMonitor = "top",
-		loggerMonitor = "monitor_0",
-		hostName = "scheduler",
-		protocols = {
-			createJob = "newJob",
-			queryJobs = "jobQuery"
-		}
+		loggerMonitor = "monitor_0"
 	}
 )
