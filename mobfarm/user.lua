@@ -1,10 +1,3 @@
-run(
-	{
-		selectorMonitor = "top",
-		loggerMonitor = "monitor_0"
-	}
-)
-
 function run(config)
 	local peripherals = setupPeripherals(config)
 	local interface = createInterface(config, peripherals)
@@ -62,3 +55,10 @@ end
 
 function renderMobSelection(monitor, state)
 end
+
+run(
+	{
+		selectorMonitor = "top",
+		loggerMonitor = "monitor_0"
+	}
+)
