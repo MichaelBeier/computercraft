@@ -49,6 +49,7 @@ function findOldItemPlace()
 end
 
 function putItemBack(index) 
+    print("old item index: ".. index);
     turtle.dropDown(); -- puts into first slot of chest
     chest.pushItems(chestLocation, 1, index);
 end
