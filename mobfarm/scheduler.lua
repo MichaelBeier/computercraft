@@ -64,7 +64,6 @@ function processMessage(message, protocol)
             if jobs[j][4] >= jobs[j][2] then
                 -- job finished
                 table.remove(jobs, j);
-                break;
             end
         end
     
