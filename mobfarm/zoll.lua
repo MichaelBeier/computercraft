@@ -7,7 +7,9 @@ local chest = peripheral.wrap(enderchestLocation);
 function analyeAndMoveConent()
     moveToTurtle();
     local content = analyzeContent();
-    moveToChest();
+    if #content > 0 then
+        moveToChest();
+    end
     return content;
 end
 
