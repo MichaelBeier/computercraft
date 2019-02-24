@@ -42,7 +42,7 @@ function processMessage(message, protocol)
             print("sending to worker: " .. textutils.serialize(mob));
             return textutils.serialize(mob);
         else 
-            return {0};
+            return "{0}";
         end
     elseif protocol == "contentUpdate" then
         print("received contentUpdate");
