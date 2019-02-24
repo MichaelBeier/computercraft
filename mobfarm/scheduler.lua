@@ -49,7 +49,7 @@ function processMessage(message, protocol)
         end
     elseif protocol == "contentUpdate" then
         print("received contentUpdate");
-        content = textutils.serialize(message);
+        content = textutils.unserialize(message);
         
         for i = 1, #content do
             for j = 1, #jobs do
