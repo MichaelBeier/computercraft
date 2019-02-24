@@ -147,7 +147,7 @@ function createSelectionRenderer(monitor)
 				local text = string.sub(mob.name, 1, buttonWidth - 2)
 				local textLength = string.len(text)
 
-				local textStart = math.floor((buttonWidth - textLength - 2) / 2)
+				local textStart = math.floor((buttonWidth - textLength) / 2)
 
 				monitor.setCursorPos(colStartX, yPos)
 				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth - 1, yPos + buttonHeight - 1, colors.lime)
