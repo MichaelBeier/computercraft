@@ -62,7 +62,7 @@ function getJob()
     --placeholder
     print("get Job");
     local job = {"wither", 64};
-
+    print(job[1] .. job[2]);
     return translateJob(job);
 end
 
