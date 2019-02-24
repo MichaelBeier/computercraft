@@ -89,6 +89,7 @@ end
 function sendNewJob(job)
     local id = rednet.lookup("newJob", "scheduler");
     local message = textutils.serialize(job);
+    print("sending "..message);
     rednet.send(id, message, "newJob");
 end
 
