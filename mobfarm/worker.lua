@@ -7,7 +7,19 @@ local chest = peripheral.wrap(chestLocation);
 local safariNets = {};
 local currentJob={0,0};
 
+function downloadConfig()
+    os.loadAPI("startup.lua");
+
+    local content = download("https://gitlab.com/michaelbeier/computercraftcollection/raw/master/mobfarm/worker_config")
+    local configHandle = fs.open("config", "w");
+    configHandle.write(content);
+    configHandle.flush();
+    configHandle.close();
+end
+
 function loadConfig()
+    downloadConfig();
+
     if not fs.exists("config") then
         safariNets = {"NICHTSDAMITERNICHTAUSVERSEHENMATCHT", "witherSkeleton", "pinkSlime"};
         local configHandle = fs.open("config", "w");
@@ -112,6 +124,11 @@ end
 
 function loadJob()
     chest.pushItems(spawnerLocation, currentJob[1], 1);
+end
+
+function moveToFront()
+    -- moves turtle to user acessible position to put a new mob into the system
+
 end
 
 startup();
