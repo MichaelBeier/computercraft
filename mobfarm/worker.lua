@@ -78,7 +78,7 @@ function translateJob(job)
 end
 
 function findSlot(text)
-    print("find slot");
+    print("find slot for " .. text);
     for i=1, #safariNets do
         print("safari: ".. safariNets[i]);
         if string.find(text, safariNets[i]) then
