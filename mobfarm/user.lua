@@ -84,6 +84,8 @@ function run(config)
 
 	interface.render(state)
 
+	local jobTimer
+
 	while true do
 		local eventType, arg1, arg2, arg3, arg4 = os.pullEvent()
 
@@ -102,10 +104,12 @@ function run(config)
 				interface.render(state)
 			end
 		elseif eventType == "timer" then
-			controllerCommunicator.sendDataRequest()
+			if (jobTimer == arg1) then
+				controllerCommunicator.sendDataRequest()
+			end
 		end
 
-		-- os.startTimer(1)
+		os.startTimer(1)
 	end
 end
 
@@ -113,10 +117,12 @@ function createControllerCommunicator(config)
 	local controllerId = rednet.lookup(config.protocols.createJob)
 
 	function sendDataRequest()
+		print("sending data request")
 		rednet.send(controllerId, nil, config.protocols.queryJobs)
 	end
 
 	function sendJobRequest(key, count)
+		print("sending job request")
 		rednet.send(
 			controllerId,
 			{
@@ -129,6 +135,7 @@ function createControllerCommunicator(config)
 	end
 
 	function handleRednetMessage(state, senderId, protocol, message)
+		print("received message", protocol)
 		if (senderId ~= controllerId or message == nil) then
 			return false
 		end
