@@ -359,6 +359,12 @@ function createLoggerRenderer(monitor)
 		local availableYSpace = sizeY - headerHeight - footerHeight - minListPadding * 2
 
 		local rowCount = math.floor(availableYSpace)
+
+		for i = 1, #state.jobs do
+			local job = state.jobs[i]
+
+			print("name", job.name, "id", id)
+		end
 	end
 
 	local renderFooter = function(state, sizeX, sizeY)
