@@ -41,6 +41,11 @@ end
 
 function createControllerCommunicator(config)
 	local controllerId = rednet.lookup(config.protocols.createJob)
+	
+	if controllerId == nil then
+	    os.sleep(1)
+	    return createControllerCommunicator(config)
+	end
 
 	local sendDataRequest = function()
 		rednet.send(controllerId, nil, config.protocols.getConfig)
