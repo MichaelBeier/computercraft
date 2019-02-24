@@ -119,9 +119,9 @@ function createInterface(config, peripherals)
 
 	function handleMouseClick(state, eventType, side, x, y)
 		if side == config.selectorMonitor then
-			return selectionRenderer.handleMouseClick(x, y)
+			return selectionRenderer.handleMouseClick(state, x, y)
 		elseif side == config.loggerMonitor then
-			return loggerRenderer.handleMouseClick(x, y)
+			return loggerRenderer.handleMouseClick(state, x, y)
 		end
 	end
 
