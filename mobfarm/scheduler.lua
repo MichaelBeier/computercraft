@@ -128,7 +128,7 @@ end
 function translateJob(job)
     local translated = job;
     translated[1] = getPrio(job[1]);
-    if prio ~= "1" then
+    if translated[1] ~= "1" then
         translated[3] = findItem(job);
     end
     return translated;
