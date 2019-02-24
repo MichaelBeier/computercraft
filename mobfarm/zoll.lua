@@ -23,8 +23,10 @@ function moveToChest()
 end
 
 function sendContentUpdate(content)
-    local text = textutils.serialize(content);
-    print(text);
+    if content ~= nil then
+        local text = textutils.serialize(content);
+        print(text);
+    end
 end
 
 function analyzeContent()
@@ -57,6 +59,7 @@ function analyzeContent()
 end
 
 while true do
+    os.sleep(1);
     local content = analyeAndMoveConent();
     sendContentUpdate(content);
 end
