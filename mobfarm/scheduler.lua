@@ -38,7 +38,7 @@ function processMessage(message, protocol)
     elseif protocol == "currentJob" then
         print("received query from worker")
         if #jobs > 0 then
-            local mob = findMob(job[1]);
+            local mob = findMob(jobs[1]);
             print("sending to worker: " .. textutils.serialize(mob));
             return textutils.serialize(mob);
         else 
