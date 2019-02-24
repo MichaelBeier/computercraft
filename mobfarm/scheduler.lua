@@ -36,6 +36,7 @@ function processMessage(message, protocol)
         end
     elseif protocol == "currentJob" then
         if #jobs > 0 then
+            print("sending to worker: " .. textutils.serialize(jobs[1]));
             return textutils.serialize(jobs[1]);
         end
     end
