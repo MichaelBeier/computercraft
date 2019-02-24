@@ -8,7 +8,10 @@ function startup()
     rednet.host("newJob", "scheduler");
     rednet.host("jobQuery", "scheduler");
     rednet.host("currentJob", "scheduler");
+    rednet.host("contentUpdate", "scheduler");
 end
+
+-- todo close jobs if empty, react to contentupdate, pause jobs
 
 function processMessage(message, protocol)
     if protocol == "jobQuery" then

@@ -89,7 +89,16 @@ end
 function getJob()
     --placeholder
     print("get Job");
-    local job = {"pink", 64};
+    local id = rednet.lookup("currentJob", "scheduler");
+    local message = "";
+    rednet.send(id, message, "currentJob");
+
+    local senderID, message, protocol = rednet.receive()
+
+
+    local job = textutils.unserialize(message);
+    table.remove(job,1); -- we dont need priority
+
     print(job[1] .. job[2]);
     return translateJob(job);
 end

@@ -60,7 +60,7 @@ function moveToChest()
     turtle.select(1);
 end
 
-function sendContentUpdate(content)
+function sendNewJobs(content)
     if #content > 0 then
         local text = textutils.serialize(content);
         print(text);
@@ -127,6 +127,6 @@ startup();
 while true do
     turtle.select(1);
     os.sleep(1);
-    local content = analyeAndMoveConent();
-    sendContentUpdate(content);
+    local jobs = analyeAndMoveConent();
+    sendNewJobs(jobs);
 end

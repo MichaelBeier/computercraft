@@ -1,8 +1,13 @@
 local enderchestLocation = "bottom"; --needs to be bottom (dropdown)
 local mobcrusherLocation = "front";
+local modemLocation = "left";
 
 local crusher = peripheral.wrap(mobcrusherLocation);
 local chest = peripheral.wrap(enderchestLocation);
+
+function startup()
+    rednet.open(modemLocation);
+end
 
 function analyeAndMoveConent()
     moveToTurtle();
@@ -29,8 +34,10 @@ end
 
 function sendContentUpdate(content)
     if #content > 0 then
-        local text = textutils.serialize(content);
-        print(text);
+        local id = rednet.lookup("contentUpdate", "scheduler");
+        local message = textutils.serialize(content);
+        print("sending "..message);
+        rednet.send(id, message, "contentUpdate");
     end
 end
 
@@ -63,6 +70,7 @@ function analyzeContent()
     return content;
 end
 
+startup();
 while true do
     turtle.select(1);
     os.sleep(1);
