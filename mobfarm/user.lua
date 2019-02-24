@@ -118,12 +118,12 @@ function createSelectionRenderer(monitor)
 					break
 				end
 
-				local colStartX = startPosX + (colCount - 1) * (buttonWidth + buttonSpacing)
+				local colStartX = startPosX + (colIndex - 1) * (buttonWidth + buttonSpacing)
 
 				monitor.setCursorPos(colStartX, yPos)
-				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth, yPos + buttonHeight, colors.lime)
+				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth - 1, yPos + buttonHeight - 1, colors.lime)
 				monitor.setCursorPos(colStartX + 1, yPos)
-				writeInColor(monitor, mob.name, colors.white)
+				writeInColor(monitor, mob.name, colors.white, colors.lime)
 			end
 
 			advanceLines(monitor, buttonHeight + buttonSpacing)
