@@ -10,6 +10,8 @@ local currentJob={0,0};
 function loadConfig()
     if not fs.exists("config") then
         safariNets = {"NICHTSDAMITERNICHTAUSVERSEHENMATCHT", "witherSkeleton", "pinkSlime"};
+        local configHandle = fs.open("config", "w");
+        configHandle.write(textutils.serialize(safariNets));
         return;
     end
 
@@ -62,7 +64,7 @@ end
 function getJob()
     --placeholder
     print("get Job");
-    local job = {"wither", 64};
+    local job = {"pink", 64};
     print(job[1] .. job[2]);
     return translateJob(job);
 end
