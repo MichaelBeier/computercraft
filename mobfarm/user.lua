@@ -6,14 +6,7 @@ function run(config)
 		selectionItems = {
 			{name = "Wither Skeleton", id = "wither", active = true}
 		},
-		jobs = {
-			{
-				name = "Wither Skeleton",
-				jobId = "a",
-				requested = 64,
-				done = 10
-			}
-		},
+		jobs = {},
 		page = 1
 	}
 
@@ -105,7 +98,7 @@ function createControllerCommunicator(config)
 				table.insert(
 					newConfig,
 					{
-						name = "",
+						name = configEntry[2],
 						id = configEntry[3],
 						active = false
 					}
