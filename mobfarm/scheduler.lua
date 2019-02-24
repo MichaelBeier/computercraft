@@ -72,7 +72,7 @@ end
 function findMob(job)
     for i = 1, #schedulerConfig do
         if schedulerConfig[i][2] == job[3] then
-            return itemToID[i][3];
+            return schedulerConfig[i][3];
         end
     end
     return 0;
