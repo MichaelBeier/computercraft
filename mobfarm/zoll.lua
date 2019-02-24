@@ -8,6 +8,7 @@ function analyeAndMoveConent()
     moveToTurtle();
     local content = analyzeContent();
     moveToChest();
+    return content;
 end
 
 function moveToTurtle()
@@ -52,10 +53,7 @@ function analyzeContent()
         end
 
         if not stacked then
-            print("not stacked");
             table.insert(content, {itemName, itemCount});
-            local text = textutils.serialize(content);
-            print(text);
         end
     end
 
