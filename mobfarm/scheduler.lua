@@ -1,5 +1,6 @@
 local jobs = {}
 local modemside = "top";
+local schedulerConfig;
 
 local priomapping = {"user", "AE"};
 
@@ -65,6 +66,48 @@ function processMessage(message, protocol)
         end
 
     end
+end
+
+function findMob(job)
+    for i = 1, #schedulerConfig do
+        if schedulerConfig[i][2] == job[3] then
+            return itemToID[i][3];
+        end
+    end
+    return 0;
+end
+
+function downloadConfig()
+    local content = download("https://gitlab.com/michaelbeier/computercraftcollection/raw/master/mobfarm/scheduler_config")
+    local configHandle = fs.open("config", "w");
+    configHandle.write(content);
+    configHandle.flush();
+    configHandle.close();
+end
+
+function download(url)
+	local httpResponse = http.get(url)
+
+	local statusCode = httpResponse.getResponseCode()
+
+	if statusCode ~= 200 then
+		return nil
+	end
+
+	local scriptContent = httpResponse.readAll()
+	return scriptContent
+end
+
+function loadConfig()
+    downloadConfig();
+
+    local configHandle = fs.open("config", "r");
+    local configContent = configHandle.readAll();
+    local config = textutils.unserialize(configContent);
+
+    configHandle.close();
+
+    schedulerConfig = config;
 end
 
 function translateJob(job)
