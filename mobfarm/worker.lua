@@ -5,7 +5,7 @@ local spawnerLocation = "front";
 local spawner = peripheral.wrap(spawnerLocation);
 local chest = peripheral.wrap(chestLocation);
 local safariNets = {};
-local currentJob={0,0};
+local currentJob={0};
 
 function downloadConfig()
     --os.loadAPI("startup.lua");
@@ -96,7 +96,7 @@ function getJob()
 
     local senderID, answer, protocol = rednet.receive()
     if answer == nil or answer == "{0}" then 
-        return;
+        return {0};
     end 
     local job = textutils.unserialize(answer);
     table.remove(job,1); -- we dont need priority
