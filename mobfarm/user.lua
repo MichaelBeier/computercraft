@@ -3,7 +3,7 @@ function run(config)
 	local interface = createInterface(config, peripherals)
 	local state = {
 		mobs = {
-			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = true},
 			{name = "Wither Skeleton", id = "wither", active = false},
 			{name = "Wither Skeleton", id = "wither", active = false},
 			{name = "Wither Skeleton", id = "wither", active = false},
@@ -79,7 +79,7 @@ function run(config)
 		local eventType, arg1, arg2, arg3, arg4 = os.pullEvent()
 
 		if eventType == "monitor_touch" then
-			interface.handleMouseClick(eventType, arg1, arg2, arg3, arg4)
+			interface.handleMouseClick(state, eventType, arg1, arg2, arg3, arg4)
 		end
 		if eventType == "mob_click" then
 			print("mob click", arg1)
@@ -117,7 +117,7 @@ function createInterface(config, peripherals)
 		term.redirect(term.native())
 	end
 
-	function handleMouseClick(eventType, side, x, y)
+	function handleMouseClick(state, eventType, side, x, y)
 		if side == config.selectorMonitor then
 			return selectionRenderer.handleMouseClick(x, y)
 		elseif side == config.loggerMonitor then
@@ -217,10 +217,12 @@ function createSelectionRenderer(monitor)
 				local endX = colStartX + buttonWidth - 1
 				local endY = yPos + buttonHeight - 1
 
+				local buttonBackground = mob.active and colors.lime or colors.black
+
 				monitor.setCursorPos(colStartX, yPos)
-				drawFilledBox(monitor, colStartX, yPos, endX, endY, colors.lime)
+				drawFilledBox(monitor, colStartX, yPos, endX, endY, buttonBackground)
 				monitor.setCursorPos(colStartX + textStart, yPos + math.floor(buttonHeight / 2))
-				writeInColor(monitor, text, colors.white, colors.lime)
+				writeInColor(monitor, text, colors.white, buttonBackground)
 
 				table.insert(
 					buttons,
@@ -284,7 +286,7 @@ function createSelectionRenderer(monitor)
 		end
 	end
 
-	function handleMouseClick(x, y)
+	function handleMouseClick(state, x, y)
 		local buttonKey = findButton(buttons, x, y)
 
 		if (buttonKey == nil) then
@@ -315,7 +317,7 @@ function createLoggerRenderer(monitor)
 	function render(state)
 	end
 
-	function handleMouseClick(x, y)
+	function handleMouseClick(state, x, y)
 		print("hi from logger monitor", "x", x, "y", y)
 	end
 
