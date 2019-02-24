@@ -41,12 +41,12 @@ end
 function createControllerCommunicator(config)
 	local controllerId = rednet.lookup(config.protocols.createJob)
 
-	function sendDataRequest()
+	local sendDataRequest = function()
 		rednet.send(controllerId, nil, config.protocols.getConfig)
 		rednet.send(controllerId, nil, config.protocols.queryJobs)
 	end
 
-	function sendJobRequest(key, count)
+	local sendJobRequest = function(key, count)
 		rednet.send(
 			controllerId,
 			textutils.serialize(
@@ -60,7 +60,7 @@ function createControllerCommunicator(config)
 		)
 	end
 
-	function handleRednetMessage(state, senderId, protocol, message)
+	local handleRednetMessage = function(state, senderId, protocol, message)
 		if (senderId ~= controllerId or message == nil) then
 			return false
 		end
@@ -139,7 +139,7 @@ function createInterface(config, peripherals)
 	local selectionRenderer = createSelectionRenderer(selectorMonitor)
 	local loggerRenderer = createLoggerRenderer(loggerMonitor)
 
-	function render(state)
+	local render = function(state)
 		term.redirect(selectorMonitor)
 		selectionRenderer.render(state)
 		term.redirect(loggerMonitor)
@@ -147,7 +147,7 @@ function createInterface(config, peripherals)
 		term.redirect(term.native())
 	end
 
-	function handleMouseClick(state, eventType, side, x, y)
+	local handleMouseClick = function(state, eventType, side, x, y)
 		if side == config.selectorMonitor then
 			return selectionRenderer.handleMouseClick(state, x, y)
 		elseif side == config.loggerMonitor then
@@ -173,7 +173,7 @@ function createSelectionRenderer(monitor)
 	local pageCount = 1
 	local startPosX
 
-	function render(state)
+	local render = function(state)
 		monitor.setBackgroundColor(colors.black)
 		monitor.clear()
 		local sizeX, sizeY = monitor.getSize()
@@ -183,7 +183,7 @@ function createSelectionRenderer(monitor)
 		renderFooter(state, sizeX, sizeY)
 	end
 
-	function renderHeader(state, sizeX)
+	local renderHeader = function(state, sizeX)
 		monitor.setCursorPos(1, 1)
 		drawFilledBox(monitor, 1, 1, sizeX, 3, colors.white)
 		monitor.setCursorPos(startPosX, 2)
@@ -191,7 +191,7 @@ function createSelectionRenderer(monitor)
 		monitor.setCursorPos(1, 1 + headerHeight)
 	end
 
-	function renderList(state, sizeX, sizeY)
+	local renderList = function(state, sizeX, sizeY)
 		monitor.setCursorPos(1, headerHeight + 1)
 
 		local longestName
@@ -271,7 +271,7 @@ function createSelectionRenderer(monitor)
 		end
 	end
 
-	function renderFooter(state, sizeX, sizeY)
+	local renderFooter = function(state, sizeX, sizeY)
 		local startPosY = sizeY - footerHeight + 1
 		monitor.setCursorPos(1, startPosY)
 
@@ -317,7 +317,7 @@ function createSelectionRenderer(monitor)
 		end
 	end
 
-	function handleMouseClick(state, x, y)
+	local handleMouseClick = function(state, x, y)
 		local buttonKey = findButton(buttons, x, y)
 
 		if (buttonKey == nil) then
@@ -344,25 +344,25 @@ function createSelectionRenderer(monitor)
 end
 
 function createLoggerRenderer(monitor)
-	-- local buttons = {}
-	-- local listEntryHeight = 1
-	-- local minListPadding = 1
-	-- local listEntrySpacing = 1
+	local buttons = {}
+	local listEntryHeight = 1
+	local minListPadding = 1
+	local listEntrySpacing = 1
 
-	function render(state)
+	local render = function(state)
 		monitor.setBackgroundColor(colors.black)
 		monitor.clear()
-		-- local sizeX, sizeY = monitor.getSize()
-		-- renderHeader(state, sizeX, sizeY)
-		-- renderList(state, sizeX, sizeY)
-		-- renderFooter(state, sizeX, sizeY)
+		local sizeX, sizeY = monitor.getSize()
+		renderHeader(state, sizeX, sizeY)
+		renderList(state, sizeX, sizeY)
+		renderFooter(state, sizeX, sizeY)
 	end
 
-	function renderHeader(state, sizeX, sizeY)
+	local renderHeader = function(state, sizeX, sizeY)
 		drawFilledBox(monitor, 1, 1, sizeX, headerHeight, colors.white)
 	end
 
-	function renderList(state, sizeX, sizeY)
+	local renderList = function(state, sizeX, sizeY)
 		monitor.setCursorPos(1, headerHeight + 2)
 
 		local availableYSpace = sizeY - headerHeight - footerHeight - minListPadding * 2
@@ -370,13 +370,13 @@ function createLoggerRenderer(monitor)
 		local rowCount = math.floor(availableYSpace)
 	end
 
-	function renderFooter(state, sizeX, sizeY)
+	local renderFooter = function(state, sizeX, sizeY)
 		local startPosY = sizeY - footerHeight + 1
 
 		drawFilledBox(monitor, 1, startPosY, sizeX, footerHeight)
 	end
 
-	function handleMouseClick(state, x, y)
+	local handleMouseClick = function(state, x, y)
 		print("hi from logger monitor", "x", x, "y", y)
 	end
 
