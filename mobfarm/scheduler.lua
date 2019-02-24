@@ -12,7 +12,7 @@ function processMessage(message, protocol)
         return textutils.serialize(jobs);
     elseif protocol == "newJob" then
         local job = textutils.unserialize(message);
-
+        print("new job is this:" .. job);
         -- {priority ("user", AE"), id, count}
 
         if #jobs == 0 then
