@@ -187,6 +187,8 @@ function createSelectionRenderer(monitor)
 		local startPosY = listSpaceStartY + math.max(minListPadding, math.floor(remainingYSpace / 2))
 		local startPosX = math.max(minListPadding, math.floor(remainingXSpace / 2))
 
+		advanceLines(monitor, minListPadding)
+
 		for rowIndex = 1, rowCount do
 			local _, yPos = monitor.getCursorPos()
 
