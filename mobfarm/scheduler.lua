@@ -19,7 +19,8 @@ function processMessage(message, protocol)
     elseif protocol == "newJob" then
         local job = textutils.unserialize(message);
         print("new job is this:" .. message);
-        -- {priority ("user", AE"), id, count}
+        -- {priority ("user", AE"), id, count, item, }
+        -- {priority, count, item, progress}
 
         if #jobs == 0 then
             print("currently no other jobs");
@@ -37,11 +38,32 @@ function processMessage(message, protocol)
     elseif protocol == "currentJob" then
         print("received query from worker")
         if #jobs > 0 then
-            print("sending to worker: " .. textutils.serialize(jobs[1]));
-            return textutils.serialize(jobs[1]);
+            local mob = findMob(job[1]);
+            print("sending to worker: " .. textutils.serialize(mob));
+            return textutils.serialize(mob);
         else 
-            return {0,0,0};
+            return {0};
         end
+    elseif protocol == "contentUpdate" then
+        print("received contentUpdate");
+        content = textutils.serialize(message);
+        
+        for i = 1, #content do
+            for j = 1, #jobs do
+                if jobs[j][3] == content[i][1] then
+                    jobs[j][4] = jobs[j][4] + content[i][2];
+                    break;
+                end
+            end
+        end
+        for j = 1, #jobs do
+            if jobs[j][4] >= jobs[j][2] then
+                -- job finished
+                table.remove(jobs, j);
+                break;
+            end
+        end
+
     end
 end
 

@@ -1,0 +1,4 @@
+{
+    {"minecraft:iron_ingot", "minecraft:skull", "wither"},
+    {"minecraft:gold_ingot", "industrialforegoing:pink_slime", "pinkSlime"}
+}

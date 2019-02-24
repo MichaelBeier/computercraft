@@ -69,22 +69,20 @@ function sendNewJobs(content)
     local messageTable = content;
     
     for i=1, #messageTable do
-        messageTable[i][2] = getID(messageTable[i][2]); 
-    end
-
-    for i=1, #messageTable do
        sendNewJob(messageTable[i]);
     end
 end
 
-function getID(text)
+function getIDandItem(text)
     for i = 1, #itemToID do
         if itemToID[i][1] == text then
-            return itemToID[i][2];
+            return itemToID[i][2],itemToID[i][3];
         end
     end
     return 0;
 end
+
+
 
 function sendNewJob(job)
     local id = rednet.lookup("newJob", "scheduler");
@@ -115,7 +113,7 @@ function analyzeContent()
         end
 
         if not stacked then
-            table.insert(content, {"AE",itemName, itemCount});
+            table.insert(content, {"AE", itemCount, itemName});
         end
     end
 

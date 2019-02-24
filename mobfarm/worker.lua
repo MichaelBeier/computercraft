@@ -129,8 +129,8 @@ function findSlot(text)
 end
 
 function changeJob(newJob)
-    print(newJob[1] .. " ".. newJob[2]);
-    if newJob[1] ~= currentJob[1] or newJob[2] ~= currentJob[2] then
+    print(newJob[1]);
+    if newJob[1] ~= currentJob[1] then
         unloadJob()
         currentJob = newJob;
         loadJob()
@@ -138,7 +138,7 @@ function changeJob(newJob)
 end
 
 function unloadJob()
-    if currentJob[1] == 0 and currentJob[2] == 0 then
+    if currentJob[1] == 0 then
         return 1;
     end
 
