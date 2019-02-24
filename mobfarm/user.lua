@@ -41,6 +41,7 @@ function createInterface(config, peripherals)
 	local loggerRenderer = createLoggerRenderer(loggerMonitor)
 
 	function render(state)
+		print("render")
 		selectionRenderer.render(state)
 		loggerRenderer.render(state)
 	end
@@ -63,6 +64,7 @@ function createSelectionRenderer(monitor)
 	local buttons
 
 	function render(state)
+		print("renderSelection")
 		local sizeX, sizeY = monitor.getSize()
 
 		monitor.setBackgroundColor(colors.black)
@@ -86,6 +88,7 @@ function createLoggerRenderer(monitor)
 	local buttons
 
 	function render(state)
+		print("render logger")
 	end
 
 	function handleMouseClick(x, y)
