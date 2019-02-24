@@ -138,15 +138,15 @@ function createSelectionRenderer(monitor)
 	local buttonHeight = 3
 
 	function render(state)
+		monitor.setBackgroundColor(colors.black)
+		monitor.clear()
 		local sizeX, sizeY = monitor.getSize()
 
-		renderHeader(state, sizeX)
 		renderList(state, sizeX, sizeY)
+		renderHeader(state, sizeX)
 	end
 
 	function renderHeader(state, sizeX)
-		monitor.setBackgroundColor(colors.black)
-		monitor.clear()
 		monitor.setCursorPos(1, 1)
 		drawFilledBox(monitor, 1, 1, sizeX, 3, colors.white)
 		monitor.setCursorPos(1, 2)
@@ -155,6 +155,8 @@ function createSelectionRenderer(monitor)
 	end
 
 	function renderList(state, sizeX, sizeY)
+		monitor.setCursorPos(1, headerHeight + 1)
+
 		local longestName
 
 		for i = 1, #state.mobs do
@@ -184,8 +186,6 @@ function createSelectionRenderer(monitor)
 		local _, listSpaceStartY = monitor.getCursorPos()
 		local startPosY = listSpaceStartY + math.max(minListPadding, math.floor(remainingYSpace / 2))
 		local startPosX = math.max(minListPadding, math.floor(remainingXSpace / 2))
-
-		advanceLines(monitor, minListPadding)
 
 		for rowIndex = 1, rowCount do
 			local _, yPos = monitor.getCursorPos()
