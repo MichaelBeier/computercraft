@@ -37,6 +37,7 @@ end
 function translateJob(job)
     local translated = job;
     translated[1] = priomapping[job[1]];
+    return translated;
 end
 
 function getPrio(text)
