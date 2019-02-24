@@ -71,7 +71,7 @@ function createSelectionRenderer(monitor)
 		monitor.setBackgroundColor(colors.black)
 		monitor.clear()
 		monitor.setCursorPos(1, 1)
-		paintutils.drawFilledBox(1, 1, sizeX, 3, colors.white)
+		drawFilledBox(monitor, 1, 1, sizeX, 3, colors.white)
 		monitor.setCursorPos(1, 2)
 		writeInColor(monitor, "Krasse Mobfarm", colors.lime)
 		monitor.setCursorPos(1, 4)
@@ -109,6 +109,18 @@ function writeInColor(output, text, color)
 	output.setTextColor(color)
 	output.write(text)
 	output.setTextColor(originalColor)
+end
+
+function drawFilledBox(output, startX, startY, endX, endY, colors)
+	local originalBackground = output.getBackgroundColor()
+	local originalTerminal = term.current()
+
+	term.redirect(output)
+
+	paintutils.drawFilledBox(startX, startY, endX, endY, colors)
+
+	term.setBackgroundColor(originalBackground)
+	term.redirect(originalTerminal)
 end
 
 run(
