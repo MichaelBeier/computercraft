@@ -99,7 +99,6 @@ function getJob()
         return {0};
     end 
     local job = textutils.unserialize(answer);
-    table.remove(job,1); -- we dont need priority
 
     print(job[1]);
     return translateJob(job);
