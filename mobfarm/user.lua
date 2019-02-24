@@ -78,8 +78,8 @@ function createControllerCommunicator(config)
 					{
 						name = jobData[3],
 						jobId = jobData[3],
-						requested = 64,
-						done = 0
+						requested = jobData[2],
+						done = jobData[4]
 					}
 				)
 			end
@@ -363,7 +363,7 @@ function createLoggerRenderer(monitor)
 		for i = 1, #state.jobs do
 			local job = state.jobs[i]
 
-			print("name", job.name, "id", id)
+			print("name", job.name, "id", job.id, "request", job.requested, "done", job.done)
 		end
 	end
 
