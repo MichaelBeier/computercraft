@@ -1,7 +1,7 @@
 function run(config)
 	local peripherals = setupPeripherals(config)
 	local interface = createInterface(config, peripherals)
-	local controllerCommunicator = createControllerCommunicator()
+	local controllerCommunicator = createControllerCommunicator(config)
 	local state = {
 		selectionItems = {
 			{name = "Wither Skeleton", id = "wither", active = true},
@@ -71,7 +71,14 @@ function run(config)
 			{name = "Wither Skeleton", id = "wither", active = false},
 			{name = "Wither Skeleton", id = "wither", active = false}
 		},
-		jobs = {},
+		jobs = {
+			{
+				name = "Wither Skeleton",
+				jobId = "a",
+				requested = 64,
+				done = 10
+			}
+		},
 		page = 1
 	}
 
@@ -84,21 +91,81 @@ function run(config)
 			interface.handleMouseClick(state, eventType, arg1, arg2, arg3, arg4)
 			interface.render(state)
 		elseif eventType == "mob_click" then
-			controllerCommunicator.sendJobRequest(arg1, "infinite")
+			-- controllerCommunicator.sendJobRequest(arg1, "infinite")
 		elseif eventType == "change_page" then
 			state.page = arg1
 			interface.render(state)
 		elseif eventType == "monitor_resize" then
 			interface.render(state)
 		elseif eventType == "rednet_message" then
-			controllerCommunicator.handleRednetMessage(state, arg1, arg2)
-			interface.render(state)
+			-- if (controllerCommunicator.handleRednetMessage(state, arg1, arg3, arg2)) then
+			-- 	interface.render(state)
+			-- end
 		elseif eventType == "timer" then
-			controllerCommunicator.sendDataRequest()
+		-- controllerCommunicator.sendDataRequest()
 		end
 
-		os.startTimer(1)
+		-- os.startTimer(1)
 	end
+end
+
+function createControllerCommunicator(config)
+	local controllerId = rednet.lookup(config.protocols.createJob)
+
+	function sendDataRequest()
+		rednet.send(controllerId, config.protocols.queryJobs)
+	end
+
+	function sendJobRequest(key, count)
+		rednet.send(
+			controllerId,
+			config.protocols.createJob,
+			{
+				"user",
+				64,
+				key
+			}
+		)
+	end
+
+	function handleRednetMessage(state, senderId, protocol, message)
+		if (senderId ~= controllerId or message == nil) then
+			return false
+		end
+
+		local data = textutils.deserialize(message)
+
+		if (protocol == config.protocols.queryJobs) then
+			local newJobs = {}
+
+			for i = 1, #data do
+				local jobData = data[i]
+
+				table.insert(
+					newJobs,
+					{
+						name = jobData[3],
+						jobId = jobData[3],
+						requested = 64,
+						done = 0
+					}
+				)
+			end
+
+			state.jobs = newJobs
+			print("jobs", textutils.serialize(newJobs))
+
+			return true
+		end
+
+		return false
+	end
+
+	return {
+		handleRednetMessage = handleRednetMessage,
+		sendJobRequest = sendJobRequest,
+		sendDataRequest = sendDataRequest
+	}
 end
 
 function createControllerCommunicator(config)
