@@ -62,7 +62,7 @@ function createControllerCommunicator(config)
 	end
 
 	local handleRednetMessage = function(state, senderId, protocol, message)
-		if (senderId ~= controllerId or message == nil) then
+		if (senderId ~= controllerId or message == nil or protocol == "dns") then
 			return false
 		end
 
