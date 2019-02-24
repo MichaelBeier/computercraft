@@ -173,16 +173,6 @@ function createSelectionRenderer(monitor)
 	local pageCount = 1
 	local startPosX
 
-	local render = function(state)
-		monitor.setBackgroundColor(colors.black)
-		monitor.clear()
-		local sizeX, sizeY = monitor.getSize()
-
-		renderList(state, sizeX, sizeY)
-		renderHeader(state, sizeX)
-		renderFooter(state, sizeX, sizeY)
-	end
-
 	local renderHeader = function(state, sizeX)
 		monitor.setCursorPos(1, 1)
 		drawFilledBox(monitor, 1, 1, sizeX, 3, colors.white)
@@ -317,6 +307,16 @@ function createSelectionRenderer(monitor)
 		end
 	end
 
+	local render = function(state)
+		monitor.setBackgroundColor(colors.black)
+		monitor.clear()
+		local sizeX, sizeY = monitor.getSize()
+
+		renderList(state, sizeX, sizeY)
+		renderHeader(state, sizeX)
+		renderFooter(state, sizeX, sizeY)
+	end
+
 	local handleMouseClick = function(state, x, y)
 		local buttonKey = findButton(buttons, x, y)
 
@@ -349,15 +349,6 @@ function createLoggerRenderer(monitor)
 	local minListPadding = 1
 	local listEntrySpacing = 1
 
-	local render = function(state)
-		monitor.setBackgroundColor(colors.black)
-		monitor.clear()
-		local sizeX, sizeY = monitor.getSize()
-		renderHeader(state, sizeX, sizeY)
-		renderList(state, sizeX, sizeY)
-		renderFooter(state, sizeX, sizeY)
-	end
-
 	local renderHeader = function(state, sizeX, sizeY)
 		drawFilledBox(monitor, 1, 1, sizeX, headerHeight, colors.white)
 	end
@@ -374,6 +365,15 @@ function createLoggerRenderer(monitor)
 		local startPosY = sizeY - footerHeight + 1
 
 		drawFilledBox(monitor, 1, startPosY, sizeX, footerHeight)
+	end
+
+	local render = function(state)
+		monitor.setBackgroundColor(colors.black)
+		monitor.clear()
+		local sizeX, sizeY = monitor.getSize()
+		renderHeader(state, sizeX, sizeY)
+		renderList(state, sizeX, sizeY)
+		renderFooter(state, sizeX, sizeY)
 	end
 
 	local handleMouseClick = function(state, x, y)
