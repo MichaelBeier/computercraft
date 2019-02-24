@@ -95,6 +95,27 @@ function createControllerCommunicator(config)
 			return true
 		end
 
+		if (protocol == config.protocols.getConfig) then
+			local newConfig = {}
+
+			for i = 1, #data do
+				local configEntry = data[i]
+
+				table.insert(
+					newConfig,
+					{
+						name = "",
+						id = configEntry[3],
+						active = false
+					}
+				)
+			end
+
+			state.selectionItems = newConfig
+
+			return true
+		end
+
 		return false
 	end
 
@@ -423,7 +444,8 @@ run(
 		hostName = "scheduler",
 		protocols = {
 			createJob = "newJob",
-			queryJobs = "jobQuery"
+			queryJobs = "jobQuery",
+			getConfig = "getConfig"
 		}
 	}
 )
