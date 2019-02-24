@@ -122,7 +122,7 @@ function createSelectionRenderer(monitor)
 
 				monitor.setCursorPos(colStartX, yPos)
 				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth, yPos + buttonHeight, colors.lime)
-				monitor.setCursorPos(colStartX + 1)
+				monitor.setCursorPos(colStartX + 1, yPos)
 				writeInColor(monitor, mob.name, colors.white)
 			end
 
