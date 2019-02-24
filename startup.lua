@@ -26,7 +26,7 @@ function createConfig()
 	end
 
 	local config = {
-		url,
+		url = url,
 		outputPath = "program.lua"
 	}
 
