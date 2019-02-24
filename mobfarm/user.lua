@@ -70,7 +70,7 @@ function createSelectionRenderer(monitor)
 	local minListPadding = 1
 	local buttonWidth = 6
 	local buttonSpacing = 1
-	local buttonHeight = 3
+	local buttonHeight = 1
 
 	function render(state)
 		local sizeX, sizeY = monitor.getSize()
@@ -112,8 +112,7 @@ function createSelectionRenderer(monitor)
 			local _, yPos = monitor.getCursorPos()
 
 			for colIndex = 1, colCount do
-				print(rowCount * rowIndex + colIndex)
-				local mob = state.mobs[rowCount * rowIndex + colIndex]
+				local mob = state.mobs[(rowIndex - 1) * rowCount + colIndex]
 
 				if (mob == nil) then
 					break
@@ -123,7 +122,8 @@ function createSelectionRenderer(monitor)
 
 				monitor.setCursorPos(colStartX, yPos)
 				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth, yPos + buttonHeight, colors.lime)
-				writeInColor(monitor, mob.name, "white")
+				monitor.setCursorPos(colStartX + 1)
+				writeInColor(monitor, mob.name, colors.white)
 			end
 
 			advanceLines(monitor, buttonHeight + buttonSpacing)
@@ -189,6 +189,7 @@ end
 function drawFilledBox(output, startX, startY, endX, endY, colors)
 	local originalBackground = output.getBackgroundColor()
 	local originalTerminal = term.current()
+	local originalX, originalY = output.getCursorPos()
 
 	term.redirect(output)
 
@@ -196,6 +197,7 @@ function drawFilledBox(output, startX, startY, endX, endY, colors)
 
 	term.setBackgroundColor(originalBackground)
 	term.redirect(originalTerminal)
+	originalTerminal.setCursorPos(originalX, originalY)
 end
 
 function advanceLines(monitor, count)
