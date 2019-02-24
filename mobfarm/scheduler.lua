@@ -5,6 +5,7 @@ local schedulerConfig;
 local priomapping = {"user", "AE"};
 
 function startup()
+    loadConfig();
     rednet.open("top");
     rednet.host("newJob", "scheduler");
     rednet.host("jobQuery", "scheduler");
