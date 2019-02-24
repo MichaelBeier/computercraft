@@ -18,6 +18,7 @@ end
 
 function processMessage(message, protocol)
     if protocol == "jobQuery" then
+        print("received jobQuery")
         return textutils.serialize(jobs);
     elseif protocol == "newJob" then
         local job = textutils.unserialize(message);
@@ -69,6 +70,7 @@ function processMessage(message, protocol)
         end
     
     elseif protocol == "getConfig" then
+        print("received config query");
         return textutils.serialize(schedulerConfig);
     end
 end
