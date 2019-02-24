@@ -91,18 +91,18 @@ function run(config)
 			interface.handleMouseClick(state, eventType, arg1, arg2, arg3, arg4)
 			interface.render(state)
 		elseif eventType == "mob_click" then
-			-- controllerCommunicator.sendJobRequest(arg1, "infinite")
+			controllerCommunicator.sendJobRequest(arg1, "infinite")
 		elseif eventType == "change_page" then
 			state.page = arg1
 			interface.render(state)
 		elseif eventType == "monitor_resize" then
 			interface.render(state)
 		elseif eventType == "rednet_message" then
-			-- if (controllerCommunicator.handleRednetMessage(state, arg1, arg3, arg2)) then
-			-- 	interface.render(state)
-			-- end
+			if (controllerCommunicator.handleRednetMessage(state, arg1, arg3, arg2)) then
+				interface.render(state)
+			end
 		elseif eventType == "timer" then
-		-- controllerCommunicator.sendDataRequest()
+			controllerCommunicator.sendDataRequest()
 		end
 
 		-- os.startTimer(1)
@@ -113,18 +113,18 @@ function createControllerCommunicator(config)
 	local controllerId = rednet.lookup(config.protocols.createJob)
 
 	function sendDataRequest()
-		rednet.send(controllerId, config.protocols.queryJobs)
+		rednet.send(controllerId, nil, config.protocols.queryJobs)
 	end
 
 	function sendJobRequest(key, count)
 		rednet.send(
 			controllerId,
-			config.protocols.createJob,
 			{
 				"user",
 				64,
 				key
-			}
+			},
+			config.protocols.createJob
 		)
 	end
 
