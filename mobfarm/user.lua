@@ -173,10 +173,10 @@ function createSelectionRenderer(monitor)
 		local availableXSpace = sizeX
 		local availableYSpace = sizeY - headerHeight - footerHeight
 
-		local approxColCount = (availableXSpace + buttonSpacing) / (buttonSpacing + buttonWidth)
+		local approxColCount = (availableXSpace - minListPadding + buttonSpacing) / (buttonSpacing + buttonWidth)
 		local colCount = math.floor(approxColCount)
 
-		local approxRowCount = (availableYSpace + buttonSpacing) / (buttonSpacing + buttonHeight)
+		local approxRowCount = (availableYSpace - minListPadding + buttonSpacing) / (buttonSpacing + buttonHeight)
 		local rowCount = math.floor(approxRowCount)
 
 		local pageCount = math.ceil(#state.mobs / colCount / rowCount)
@@ -232,7 +232,7 @@ function createSelectionRenderer(monitor)
 	end
 
 	function renderFooter(state, sizeX, sizeY)
-		local startPosY = sizeY - footerHeight
+		local startPosY = sizeY - footerHeight + 1
 		monitor.setCursorPos(1, startPosY)
 
 		drawFilledBox(monitor, 1, startPosY, sizeX, startPosY + footerHeight, colors.white)
