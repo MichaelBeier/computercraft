@@ -210,7 +210,7 @@ function createSelectionRenderer(monitor)
 				writeInColor(monitor, text, colors.white, colors.lime)
 			end
 
-			monitor.setCursorPos(yPos + buttonHeight + buttonSpacing)
+			monitor.setCursorPos(1, yPos + buttonHeight + buttonSpacing)
 		end
 	end
 
