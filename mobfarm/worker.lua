@@ -99,7 +99,7 @@ function changeJob(newJob)
 end
 
 function unloadJob()
-    if currentJob[1] ~= 0 and currentJob[2] ~= 0 then
+    if currentJob[1] == 0 and currentJob[2] == 0 then
         return 1;
     end
 
