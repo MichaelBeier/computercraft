@@ -364,7 +364,7 @@ function createLoggerRenderer(monitor)
 	local renderFooter = function(state, sizeX, sizeY)
 		local startPosY = sizeY - footerHeight + 1
 
-		drawFilledBox(monitor, 1, startPosY, sizeX, footerHeight)
+		drawFilledBox(monitor, 1, startPosY, sizeX, footerHeight, colors.white)
 	end
 
 	local render = function(state)
