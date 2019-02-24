@@ -82,7 +82,7 @@ function run(config)
 			interface.handleMouseClick(eventType, arg1, arg2, arg3, arg4)
 		end
 		if eventType == "mob_click" then
-		-- TODO: handle events which are being triggered by a click onto a mob on the monitor
+			print("mob click", arg1)
 		end
 
 		interface.render(state)
@@ -229,7 +229,13 @@ function createSelectionRenderer(monitor)
 	end
 
 	function handleMouseClick(x, y)
-		print("hi from selection monitor", "x", x, "y", y)
+		local mob = findButton(mobButtons, x, y)
+
+		if (mob == nil) then
+			return
+		end
+
+		os.queueEvent("mob_click", mob)
 	end
 
 	return {
@@ -288,6 +294,17 @@ end
 function advanceLines(monitor, count)
 	local _, y = monitor.getCursorPos()
 	monitor.setCursorPos(1, y + count)
+end
+
+function findButton(buttons, x, y)
+	for i = 1, #buttons do
+		local button = buttons[i]
+
+		if (x >= button.startX and x <= button.endX and y >= button.startY and y <= button.endY) then
+			return button.key
+		end
+	end
+	return nil
 end
 
 run(
