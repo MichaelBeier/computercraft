@@ -113,7 +113,6 @@ function createSelectionRenderer(monitor)
 
 			for colIndex = 1, colCount do
 				print(rowCount * rowIndex + colIndex)
-				print(textutils.serialize(state.mobs))
 				local mob = state.mobs[rowCount * rowIndex + colIndex]
 
 				if (mob == nil) then
