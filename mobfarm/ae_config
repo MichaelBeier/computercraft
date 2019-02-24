@@ -1,3 +1,4 @@
 {
-    {"minecraft:iron_ingot", "wither"}
+    {"minecraft:iron_ingot", "wither"},
+    {"minecraft:gold_ingot", "pinkSlime"}
 }
