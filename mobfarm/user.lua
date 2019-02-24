@@ -10,7 +10,7 @@ function run(config)
 	while true do
 		local eventType, arg1, arg2, arg3, arg4 = os.pullEvent()
 
-		if eventType == "mouse_click" then
+		if eventType == "monitor_touch" then
 			interface.handleMouseClick(eventType, arg1, arg2, arg3, arg4)
 		end
 		if eventType == "mob_click" then
@@ -35,13 +35,20 @@ function createInterface(config, peripherals)
 	local selectorMonitor = peripherals.selectorMonitor
 	local loggerMonitor = peripherals.loggerMonitor
 
+	local selectionRenderer = createSelectionRenderer(selectorMonitor)
+	local loggerRenderer = createLoggerRenderer(loggerMonitor)
+
 	function render(state)
-		renderMobSelection(selectorMonitor, state)
-		renderLogger(loggerMonitor, state)
+		selectionRenderer.render(state)
+		loggerRenderer.render(state)
 	end
 
-	function handleMouseClick(eventType, button, x, y)
-		print("x", x, "y", y)
+	function handleMouseClick(eventType, side, x, y)
+		if side == config.selectorMonitor then
+			return selectionRenderer.handleMouseClick(x, y)
+		elseif side == config.loggerMonitor then
+			return loggerRenderer.handleMouseClick(x, y)
+		end
 	end
 
 	return {
@@ -50,10 +57,36 @@ function createInterface(config, peripherals)
 	}
 end
 
-function renderLogger(monitor, state)
+function createSelectionRenderer(monitor)
+	local buttons
+
+	function render(state)
+	end
+
+	function handleMouseClick(x, y)
+		print("hi from selection monitor", "x", x, "y", y)
+	end
+
+	return {
+		render = render,
+		handleMouseClick = handleMouseClick
+	}
 end
 
-function renderMobSelection(monitor, state)
+function createLoggerRenderer(monitor)
+	local buttons
+
+	function render(state)
+	end
+
+	function handleMouseClick(x, y)
+		print("hi from logger monitor", "x", x, "y", y)
+	end
+
+	return {
+		render = render,
+		handleMouseClick = handleMouseClick
+	}
 end
 
 run(
