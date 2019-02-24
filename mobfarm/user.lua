@@ -3,6 +3,16 @@ function run(config)
 	local interface = createInterface(config, peripherals)
 	local state = {
 		mobs = {
+			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = false},
+			{name = "Wither Skeleton", id = "wither", active = false},
 			{name = "Wither Skeleton", id = "wither", active = false}
 		},
 		page = 1
@@ -127,10 +137,10 @@ function createSelectionRenderer(monitor)
 
 				local textStart = math.floor((buttonWidth - textLength - 2) / 2)
 
-				monitor.setCursorPos(colStartX + textStart, yPos)
-				writeInColor(monitor, text, colors.white)
 				monitor.setCursorPos(colStartX, yPos)
 				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth - 1, yPos + buttonHeight - 1, colors.lime)
+				monitor.setCursorPos(colStartX + textStart, yPos)
+				writeInColor(monitor, text, colors.white)
 			end
 
 			advanceLines(monitor, buttonHeight + buttonSpacing)
