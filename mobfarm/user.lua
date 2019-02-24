@@ -238,7 +238,7 @@ function createSelectionRenderer(monitor)
 				local endX = colStartX + buttonWidth - 1
 				local endY = yPos + buttonHeight - 1
 
-				local buttonBackground = mob.active and colors.lime or colors.black
+				local buttonBackground = colors.lime
 
 				monitor.setCursorPos(colStartX, yPos)
 				drawFilledBox(monitor, colStartX, yPos, endX, endY, buttonBackground)
