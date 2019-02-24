@@ -25,13 +25,16 @@ function createConfig()
 		return createConfig()
 	end
 
-	local configHandle = fs.open(configName, "w")
 	local config = {
 		url,
 		outputPath = "program.lua"
 	}
 
+	local configHandle = fs.open(configName, "w")
 	configHandle.write(textutils.serialize(config))
+	configHandle.flush()
+	configHandle.close()
+
 	return config
 end
 
