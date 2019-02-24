@@ -51,11 +51,13 @@ function createControllerCommunicator(config)
 	function sendJobRequest(key, count)
 		rednet.send(
 			controllerId,
-			{
-				"user",
-				64,
-				key
-			},
+			textutils.serialize(
+				{
+					"user",
+					64,
+					key
+				}
+			),
 			config.protocols.createJob
 		)
 	end
@@ -98,8 +100,8 @@ function createControllerCommunicator(config)
 				table.insert(
 					newConfig,
 					{
-						name = configEntry[2],
-						id = configEntry[3],
+						name = configEntry[3],
+						id = configEntry[2],
 						active = false
 					}
 				)
