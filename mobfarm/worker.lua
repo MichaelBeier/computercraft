@@ -90,6 +90,7 @@ function findSlot(text)
 end
 
 function changeJob(newJob)
+    print(newJob[1] .. " ".. newJob[2]);
     if newJob[1] ~= currentJob[1] or newJob[2] ~= currentJob[2] then
         unloadJob()
         currentJob = newJob;
