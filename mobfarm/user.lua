@@ -51,12 +51,10 @@ function createControllerCommunicator(config)
 	local controllerId = rednet.lookup(config.protocols.createJob)
 
 	function sendDataRequest()
-		print("sending data request")
 		rednet.send(controllerId, nil, config.protocols.queryJobs)
 	end
 
 	function sendJobRequest(key, count)
-		print("sending job request")
 		rednet.send(
 			controllerId,
 			{
@@ -69,7 +67,6 @@ function createControllerCommunicator(config)
 	end
 
 	function handleRednetMessage(state, senderId, protocol, message)
-		print("received message", protocol)
 		if (senderId ~= controllerId or message == nil) then
 			return false
 		end
@@ -94,7 +91,6 @@ function createControllerCommunicator(config)
 			end
 
 			state.jobs = newJobs
-			print("jobs", textutils.serialize(newJobs))
 
 			return true
 		end
@@ -150,10 +146,11 @@ function createInterface(config, peripherals)
 	}
 end
 
+local headerHeight = 3
+local footerHeight = 3
+
 function createSelectionRenderer(monitor)
 	local buttons = {}
-	local headerHeight = 3
-	local footerHeight = 3
 	local minListPadding = 1
 	local buttonWidth = 16
 	local buttonSpacing = 1
@@ -332,9 +329,34 @@ function createSelectionRenderer(monitor)
 end
 
 function createLoggerRenderer(monitor)
-	local buttons
+	local buttons = {}
+	local listEntryHeight = 1
+	local minListPadding = 1
+	local listEntrySpacing = 1
 
 	function render(state)
+		local sizeX, sizeY = monitor.getSize()
+		renderHeader(state, sizeX, sizeY)
+		renderList(state, sizeX, sizeY)
+		renderFooter(state, sizeX, sizeY)
+	end
+
+	function renderHeader(state, sizeX, sizeY)
+		drawFilledBox(monitor, 1, 1, sizeX, headerHeight, colors.white)
+	end
+
+	function renderList(state, sizeX, sizeY)
+		monitor.setCursorPos(1, headerHeight + 2)
+
+		local availableYSpace = sizeY - headerHeight - footerHeight - minListPadding * 2
+
+		local rowCount = math.floor(availableYSpace)
+	end
+
+	function renderFooter(state, sizeX, sizeY)
+		local startPosY = sizeY - footerHeight + 1
+
+		drawFilledBox(monitor, 1, startPosY, sizeX, footerHeight)
 	end
 
 	function handleMouseClick(state, x, y)
