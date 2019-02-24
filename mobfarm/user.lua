@@ -1,6 +1,7 @@
 function run(config)
 	local peripherals = setupPeripherals(config)
 	local interface = createInterface(config, peripherals)
+	local controllerCommunicator = createControllerCommunicator()
 	local state = {
 		selectionItems = {
 			{name = "Wither Skeleton", id = "wither", active = true},
@@ -81,16 +82,36 @@ function run(config)
 
 		if eventType == "monitor_touch" then
 			interface.handleMouseClick(state, eventType, arg1, arg2, arg3, arg4)
-		end
-		if eventType == "mob_click" then
+			interface.render(state)
+		elseif eventType == "mob_click" then
 			print("mob click", arg1)
-		end
-		if eventType == "change_page" then
+		elseif eventType == "change_page" then
 			state.page = arg1
+			interface.render(state)
+		elseif eventType == "monitor_resize" then
+			interface.render(state)
+		elseif eventType == "rednet_message" then
+			controllerCommunicator.handleRednetMessage(state, arg1, arg2)
+			interface.render(state)
+		elseif eventType == "timer" then
+			controllerCommunicator.requestData()
 		end
 
-		interface.render(state)
+		os.startTimer(1)
 	end
+end
+
+function createControllerCommunicator(config)
+	function requestData()
+	end
+
+	function handleRednetMessage(state, senderId, message)
+	end
+
+	return {
+		requestData = requestData,
+		handleRednetMessage = handleRednetMessage
+	}
 end
 
 function setupPeripherals(config)
