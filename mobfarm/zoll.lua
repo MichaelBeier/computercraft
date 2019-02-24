@@ -54,6 +54,8 @@ function analyzeContent()
         if not stacked then
             print("not stacked");
             table.insert(content, {itemName, itemCount});
+            local text = textutils.serialize(content);
+            print(text);
         end
     end
 
