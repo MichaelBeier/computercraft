@@ -4,7 +4,8 @@ function run(config)
 	local state = {
 		mobs = {
 			{name = "Wither Skeleton", id = "wither", active = false}
-		}
+		},
+		page = 1
 	}
 
 	interface.render(state)
@@ -64,18 +65,47 @@ end
 
 function createSelectionRenderer(monitor)
 	local buttons
+	local headerHeight = 3
+	local footerHeight = 3
+	local minListPadding = 1
+	local buttonWidth = 6
+	local buttonSpacing = 1
+	local buttonHeight = 3
 
 	function render(state)
 		local sizeX, sizeY = monitor.getSize()
 
+		renderHeader(state, sizeX)
+		renderList(state, sizeX, sizeY)
+	end
+
+	function renderHeader(state, sizeX)
 		monitor.setBackgroundColor(colors.black)
 		monitor.clear()
 		monitor.setCursorPos(1, 1)
 		drawFilledBox(monitor, 1, 1, sizeX, 3, colors.white)
 		monitor.setCursorPos(1, 2)
 		writeInColor(monitor, "Krasse Mobfarm", colors.lime, colors.white)
-		monitor.setCursorPos(1, 4)
-		writeInColor(monitor, "X", colors.white)
+		monitor.setCursorPos(1, 1 + headerHeight)
+	end
+
+	function renderList(state, sizeX, sizeY)
+		local availableXSpace = sizeX - minListPadding * 2
+		local availableYSpace = sizeY - minListPadding * 2 - headerHeight - footerHeight
+
+		local approxColCount = (availableXSpace + buttonSpacing) / (buttonSpacing + buttonWidth)
+		local colCount = math.floor(approxColCount)
+
+		local approxRowCount = (availableYSpace + buttonSpacing) / (buttonSpacing + buttonHeight)
+		local rowCount = math.floor(approxRowCount)
+
+		local pageCount = math.ceil(#state.mobs / colCount / rowCount)
+
+		print("colCount", colCount, "rowCount", rowCount, "pageCount", pageCount)
+
+		local _, listSpaceStartY = monitor.getCursorPos()
+		local startPosY = listSpaceStartY + minListPadding
+		local startPosX = 1 + minListPadding
 	end
 
 	function handleMouseClick(x, y)
