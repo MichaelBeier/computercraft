@@ -35,6 +35,7 @@ function processMessage(message, protocol)
             return table.insert(jobs, translated);
         end
     elseif protocol == "currentJob" then
+        print("received query from worker")
         if #jobs > 0 then
             print("sending to worker: " .. textutils.serialize(jobs[1]));
             return textutils.serialize(jobs[1]);

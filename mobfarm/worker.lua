@@ -94,9 +94,9 @@ function getJob()
     local message = "";
     rednet.send(id, message, "currentJob");
 
-    local senderID, message, protocol = rednet.receive()
+    local senderID, answer, protocol = rednet.receive()
 
-    local job = textutils.unserialize(message);
+    local job = textutils.unserialize(answer);
     table.remove(job,1); -- we dont need priority
 
     print(job[1] .. job[2]);
