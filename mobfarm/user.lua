@@ -86,6 +86,8 @@ function run(config)
 
 	local jobTimer
 
+	os.startTimer(1)
+
 	while true do
 		local eventType, arg1, arg2, arg3, arg4 = os.pullEvent()
 
@@ -106,10 +108,9 @@ function run(config)
 		elseif eventType == "timer" then
 			if (jobTimer == arg1) then
 				controllerCommunicator.sendDataRequest()
+				jobTimer = os.startTimer(1)
 			end
 		end
-
-		os.startTimer(1)
 	end
 end
 
