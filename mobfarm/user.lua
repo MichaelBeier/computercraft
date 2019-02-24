@@ -63,12 +63,12 @@ function createSelectionRenderer(monitor)
 	function render(state)
 		local sizeX, sizeY = monitor.getSize()
 
-		monitor.setBackgroundColor(0x000000)
+		monitor.setBackgroundColor(colors.black)
 		monitor.clear()
 		monitor.setCursorPos(0, 0)
 
-		paintutils.drawBox(0, 0, sizeX, 3, 0xffffff)
-		writeInColor(monitor, "Krasse Mobfarm", 0x00ff00)
+		paintutils.drawBox(0, 0, sizeX, 3, colors.white)
+		writeInColor(monitor, "Krasse Mobfarm", colors.lime)
 	end
 
 	function handleMouseClick(x, y)
