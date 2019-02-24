@@ -73,7 +73,7 @@ function createSelectionRenderer(monitor)
 		monitor.setCursorPos(1, 1)
 		drawFilledBox(monitor, 1, 1, sizeX, 3, colors.white)
 		monitor.setCursorPos(1, 2)
-		writeInColor(monitor, "Krasse Mobfarm", colors.lime)
+		writeInColor(monitor, "Krasse Mobfarm", colors.lime, colors.white)
 		monitor.setCursorPos(1, 4)
 		writeInColor(monitor, "X", colors.white)
 	end
@@ -104,11 +104,21 @@ function createLoggerRenderer(monitor)
 	}
 end
 
-function writeInColor(output, text, color)
+function writeInColor(output, text, color, backgroundColor)
 	local originalColor = output.getTextColor()
-	output.setTextColor(color)
+	local originalBackgroundColor = output.getBackgroundColor()
+
+	if (color ~= nil) then
+		output.setTextColor(color)
+	end
+
+	if (backgroundColor ~= nil) then
+		output.setBackgroundColor(backgroundColor)
+	end
+
 	output.write(text)
 	output.setTextColor(originalColor)
+	output.setBackgroundColor(originalBackgroundColor)
 end
 
 function drawFilledBox(output, startX, startY, endX, endY, colors)
