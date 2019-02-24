@@ -167,8 +167,8 @@ function createSelectionRenderer(monitor)
 			buttonWidth = string.len(longestName) + 2
 		end
 
-		local availableXSpace = sizeX - minListPadding * 2
-		local availableYSpace = sizeY - minListPadding * 2 - headerHeight - footerHeight
+		local availableXSpace = sizeX
+		local availableYSpace = sizeY - headerHeight - footerHeight
 
 		local approxColCount = (availableXSpace + buttonSpacing) / (buttonSpacing + buttonWidth)
 		local colCount = math.floor(approxColCount)
