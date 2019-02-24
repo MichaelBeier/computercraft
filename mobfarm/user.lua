@@ -41,9 +41,11 @@ function createInterface(config, peripherals)
 	local loggerRenderer = createLoggerRenderer(loggerMonitor)
 
 	function render(state)
-		print("render")
+		term.redirect(selectorMonitor)
 		selectionRenderer.render(state)
+		term.redirect(loggerMonitor)
 		loggerRenderer.render(state)
+		term.redirect(term.native())
 	end
 
 	function handleMouseClick(eventType, side, x, y)
@@ -64,14 +66,16 @@ function createSelectionRenderer(monitor)
 	local buttons
 
 	function render(state)
-		print("renderSelection")
 		local sizeX, sizeY = monitor.getSize()
 
 		monitor.setBackgroundColor(colors.black)
 		monitor.clear()
-		monitor.setCursorPos(0, 0)
-
+		monitor.setCursorPos(1, 1)
+		paintutils.drawFilledBox(1, 1, sizeX, 3, colors.white)
+		monitor.setCursorPos(1, 2)
 		writeInColor(monitor, "Krasse Mobfarm", colors.lime)
+		monitor.setCursorPos(1, 4)
+		writeInColor(monitor, "X", colors.white)
 	end
 
 	function handleMouseClick(x, y)
@@ -88,7 +92,6 @@ function createLoggerRenderer(monitor)
 	local buttons
 
 	function render(state)
-		print("render logger")
 	end
 
 	function handleMouseClick(x, y)
