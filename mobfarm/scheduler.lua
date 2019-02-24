@@ -23,9 +23,8 @@ function processMessage(message, protocol)
     elseif protocol == "newJob" then
         local job = textutils.unserialize(message);
         print("new job is this:" .. message);
-        -- {priority ("user", AE"), id, count, item, }
         -- {priority, count, item, progress}
-        job[3] = findItem(job);
+        
         table.insert(job,0);
         if #jobs == 0 then
             print("currently no other jobs");
@@ -129,6 +128,9 @@ end
 function translateJob(job)
     local translated = job;
     translated[1] = getPrio(job[1]);
+    if prio ~= "1" then
+        translated[3] = findItem(job);
+    end
     return translated;
 end
 
