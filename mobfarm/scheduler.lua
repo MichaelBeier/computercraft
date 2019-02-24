@@ -21,7 +21,7 @@ function processMessage(message, protocol)
         print("new job is this:" .. message);
         -- {priority ("user", AE"), id, count, item, }
         -- {priority, count, item, progress}
-
+        table.insert(job,0);
         if #jobs == 0 then
             print("currently no other jobs");
             local translated = translateJob(job);
