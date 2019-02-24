@@ -80,6 +80,7 @@ end
 function findSlot(text)
     print("find slot");
     for i=1, #safariNets do
+        print("safari: ".. safariNets[1]);
         if string.find(text, safariNets[i]) then
             print("found slot");
             return i;
