@@ -8,6 +8,11 @@ function downloadConfig()
     configHandle.close();
 end
 
+function startup()
+    rednet.open("left");
+    loadConfig();
+end
+
 function download(url)
 	local httpResponse = http.get(url)
 
@@ -116,6 +121,8 @@ function analyzeContent()
     return content;
 end
 
+
+startup();
 while true do
     turtle.select(1);
     os.sleep(1);
