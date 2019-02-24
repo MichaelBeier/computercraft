@@ -144,6 +144,7 @@ function createSelectionRenderer(monitor)
 
 		renderList(state, sizeX, sizeY)
 		renderHeader(state, sizeX)
+		renderFooter(state, sizeX, sizeY)
 	end
 
 	function renderHeader(state, sizeX)
@@ -228,6 +229,13 @@ function createSelectionRenderer(monitor)
 
 			monitor.setCursorPos(1, yPos + buttonHeight + buttonSpacing)
 		end
+	end
+
+	function renderFooter(state, sizeX, sizeY)
+		local startPosY = sizeY - footerHeight
+		monitor.setCursorPos(1, startPosY)
+
+		drawFilledBox(monitor, 1, startPosY, sizeX, startPosY + footerHeight, colors.white)
 	end
 
 	function handleMouseClick(x, y)
