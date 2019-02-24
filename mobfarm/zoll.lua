@@ -30,7 +30,7 @@ function sendContentUpdate(content)
 end
 
 function analyzeContent()
-    local content;
+    local content = {};
 
     for i=1, 16 do
         if turtle.getItemCount(i) == 0 then
