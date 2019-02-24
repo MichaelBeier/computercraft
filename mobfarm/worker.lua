@@ -60,14 +60,16 @@ end
 
 function getJob()
     --placeholder
+    print("get Job");
     local job = {"wither", 64};
 
     return translateJob(job);
 end
 
 function translateJob(job)
+    print("translate job");
     local slot = findSlot(job[1]);
-
+    
     if slot == 0 then
         return nil
     end
@@ -76,8 +78,10 @@ function translateJob(job)
 end
 
 function findSlot(text)
+    print("find slot");
     for i=1, #safariNets do
         if string.find(text, safariNets[i]) then
+            print("found slot");
             return i;
         end
     end
