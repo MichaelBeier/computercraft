@@ -1,18 +1,30 @@
-local enderchestLocation = "right";
-local mobcrusherLocation = "back";
+local enderchestLocation = "bottom"; --needs to be bottom (dropdown)
+local mobcrusherLocation = "front";
 
 local crusher = peripheral.wrap(mobcrusherLocation);
 local chest = peripheral.wrap(enderchestLocation);
 
 function analyeAndMoveConent()
-    moveToTurtle()
-    local content = analyzeContent()
+    moveToTurtle();
+    local content = analyzeContent();
+    moveToChest();
 end
 
 function moveToTurtle()
     for i=1, 16 do
-        turtle.suck()
+        turtle.suck();
     end
+end
+
+function moveToChest()
+    for i=1, 16 do
+        turtle.dropDown();
+    end    
+end
+
+function sendContentUpdate(content)
+    local text = textutils.serialize(content);
+    print(text);
 end
 
 function analyzeContent()
@@ -21,12 +33,30 @@ function analyzeContent()
     for i=1, 16 do
         if turtle.getItemCount(i) == 0 then
             return content;
-        turtle.getItemDetail(i);
-        table.insert(content,)
+        end
+
+        local data = turtle.getItemDetail(i);
+        local itemName = data.name;
+        local itemCount = data.count;
+
+        local stacked = false
+
+        for j=1, #content do
+            if content[j][1] == itemName then
+                content[j][2] = content[j][2] + itemCount;
+                stacked = true;
+            end
+        end
+
+        if not stacked then
+            table.insert(content, {itemName, itemCount});
+        end
     end
+
+    return content;
 end
 
 while true do
     local content = analyeAndMoveConent();
-    sendContentUpdate();
+    sendContentUpdate(content);
 end
