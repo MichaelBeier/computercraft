@@ -2,7 +2,7 @@ function run(config)
 	local peripherals = setupPeripherals(config)
 	local interface = createInterface(config, peripherals)
 	local state = {
-		mobs = {
+		selectionItems = {
 			{name = "Wither Skeleton", id = "wither", active = true},
 			{name = "Wither Skeleton", id = "wither", active = false},
 			{name = "Wither Skeleton", id = "wither", active = false},
@@ -165,9 +165,9 @@ function createSelectionRenderer(monitor)
 
 		local longestName
 
-		for i = 1, #state.mobs do
-			if longestName == nil or string.len(state.mobs[i].name) > string.len(longestName) then
-				longestName = state.mobs[i].name
+		for i = 1, #state.selectionItems do
+			if longestName == nil or string.len(state.selectionItems[i].name) > string.len(longestName) then
+				longestName = state.selectionItems[i].name
 			end
 		end
 
@@ -184,7 +184,7 @@ function createSelectionRenderer(monitor)
 		local approxRowCount = (availableYSpace - minListPadding * 2 + buttonSpacing) / (buttonSpacing + buttonHeight)
 		local rowCount = math.floor(approxRowCount)
 
-		pageCount = math.ceil(#state.mobs / colCount / rowCount)
+		pageCount = math.ceil(#state.selectionItems / colCount / rowCount)
 
 		local remainingXSpace = availableXSpace + buttonSpacing - (colCount * (buttonWidth + buttonSpacing))
 		local remainingYSpace = availableYSpace + buttonSpacing - (rowCount * (buttonHeight + buttonSpacing))
@@ -201,7 +201,7 @@ function createSelectionRenderer(monitor)
 			local _, yPos = monitor.getCursorPos()
 
 			for colIndex = 1, colCount do
-				local mob = state.mobs[(rowIndex - 1) * rowCount + colIndex + itemStartIndex]
+				local mob = state.selectionItems[(rowIndex - 1) * rowCount + colIndex + itemStartIndex]
 
 				if (mob == nil) then
 					break
