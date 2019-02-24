@@ -456,6 +456,11 @@ end
 run(
 	{
 		selectorMonitor = "top",
-		loggerMonitor = "monitor_0"
+		loggerMonitor = "monitor_0",
+		hostName = "scheduler",
+		protocols = {
+			createJob = "newJob",
+			queryJobs = "jobQuery"
+		}
 	}
 )
