@@ -8,7 +8,7 @@ local safariNets = {};
 local currentJob={0,0};
 
 function downloadConfig()
-    os.loadAPI("startup.lua");
+    os.loadAPI("startup");
 
     local content = download("https://gitlab.com/michaelbeier/computercraftcollection/raw/master/mobfarm/worker_config")
     local configHandle = fs.open("config", "w");
