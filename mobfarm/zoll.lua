@@ -24,8 +24,7 @@ function moveToChest()
 end
 
 function sendContentUpdate(content)
-    if #content then
-        print("not nil");
+    if #content > 0 then
         local text = textutils.serialize(content);
         print(text);
     end
