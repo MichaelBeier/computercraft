@@ -141,7 +141,7 @@ function createControllerCommunicator(config)
 			return false
 		end
 
-		local data = textutils.deserialize(message)
+		local data = textutils.unserialize(message)
 
 		if (protocol == config.protocols.queryJobs) then
 			local newJobs = {}
