@@ -108,10 +108,10 @@ function createSelectionRenderer(monitor)
 		local startPosY = listSpaceStartY + math.max(minListPadding, math.floor(remainingYSpace / 2))
 		local startPosX = math.max(minListPadding, math.floor(remainingXSpace / 2))
 
-		for rowIndex = 1, #rowCount do
+		for rowIndex = 1, rowCount do
 			local _, yPos = monitor.getCursorPos()
 
-			for colIndex = 1, #colCount do
+			for colIndex = 1, colCount do
 				local mob = state.mobs[rowCount * rowIndex + colIndex]
 
 				if (mob == nil) then
