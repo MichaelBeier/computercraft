@@ -4,72 +4,7 @@ function run(config)
 	local controllerCommunicator = createControllerCommunicator(config)
 	local state = {
 		selectionItems = {
-			{name = "Wither Skeleton", id = "wither", active = true},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false},
-			{name = "Wither Skeleton", id = "wither", active = false}
+			{name = "Wither Skeleton", id = "wither", active = true}
 		},
 		jobs = {
 			{
@@ -84,9 +19,7 @@ function run(config)
 
 	interface.render(state)
 
-	local jobTimer
-
-	os.startTimer(1)
+	local jobTimer = os.startTimer(1)
 
 	while true do
 		local eventType, arg1, arg2, arg3, arg4 = os.pullEvent()
