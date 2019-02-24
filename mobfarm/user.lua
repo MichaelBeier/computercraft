@@ -168,25 +168,6 @@ function createControllerCommunicator(config)
 	}
 end
 
-function createControllerCommunicator(config)
-	function sendDataRequest()
-		print("sending data request")
-	end
-
-	function sendJobRequest(key, count)
-		print("sending job request", key)
-	end
-
-	function handleRednetMessage(state, senderId, message)
-	end
-
-	return {
-		handleRednetMessage = handleRednetMessage,
-		sendJobRequest = sendJobRequest,
-		sendDataRequest = sendDataRequest
-	}
-end
-
 function setupPeripherals(config)
 	local selectorMonitor = peripheral.wrap(config.selectorMonitor)
 	local loggerMonitor = peripheral.wrap(config.loggerMonitor)
