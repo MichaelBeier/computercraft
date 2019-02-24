@@ -9,6 +9,8 @@ function getConfig()
 	local configContent = configHandle.readAll()
 	local config = textutils.unserialize(configContent)
 
+	configHandle.close()
+
 	return config
 end
 
