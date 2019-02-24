@@ -11,6 +11,7 @@ function startup()
     rednet.host("jobQuery", "scheduler");
     rednet.host("currentJob", "scheduler");
     rednet.host("contentUpdate", "scheduler");
+    rednet.host("getConfig", "scheduler");
 end
 
 -- todo close jobs if empty, react to contentupdate, pause jobs
@@ -66,7 +67,9 @@ function processMessage(message, protocol)
                 break;
             end
         end
-
+    
+    elseif protocol == "getConfig" then
+        return textutils.serialize(schedulerConfig);
     end
 end
 
