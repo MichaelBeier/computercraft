@@ -136,6 +136,7 @@ function createSelectionRenderer(monitor)
 	local buttonWidth = 16
 	local buttonSpacing = 1
 	local buttonHeight = 3
+	local pageCount = 1
 
 	function render(state)
 		monitor.setBackgroundColor(colors.black)
@@ -173,13 +174,13 @@ function createSelectionRenderer(monitor)
 		local availableXSpace = sizeX
 		local availableYSpace = sizeY - headerHeight - footerHeight
 
-		local approxColCount = (availableXSpace - minListPadding + buttonSpacing) / (buttonSpacing + buttonWidth)
+		local approxColCount = (availableXSpace - minListPadding * 2 + buttonSpacing) / (buttonSpacing + buttonWidth)
 		local colCount = math.floor(approxColCount)
 
-		local approxRowCount = (availableYSpace - minListPadding + buttonSpacing) / (buttonSpacing + buttonHeight)
+		local approxRowCount = (availableYSpace - minListPadding * 2 + buttonSpacing) / (buttonSpacing + buttonHeight)
 		local rowCount = math.floor(approxRowCount)
 
-		local pageCount = math.ceil(#state.mobs / colCount / rowCount)
+		pageCount = math.ceil(#state.mobs / colCount / rowCount)
 
 		local remainingXSpace = availableXSpace + buttonSpacing - (colCount * (buttonWidth + buttonSpacing))
 		local remainingYSpace = availableYSpace + buttonSpacing - (rowCount * (buttonHeight + buttonSpacing))
@@ -236,6 +237,14 @@ function createSelectionRenderer(monitor)
 		monitor.setCursorPos(1, startPosY)
 
 		drawFilledBox(monitor, 1, startPosY, sizeX, startPosY + footerHeight, colors.white)
+
+		local pageText = state.page .. " / " .. pageCount
+		local textLen = string.len(pageText)
+
+		local textStart = math.floor((sizeX - textLen) / 2)
+
+		monitor.setCursorPos(textStart, startPosY + 1)
+		writeInColor(monitor, pageText, colors.black, colors.white)
 	end
 
 	function handleMouseClick(x, y)
