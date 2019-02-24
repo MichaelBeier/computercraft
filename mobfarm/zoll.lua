@@ -64,6 +64,7 @@ function analyzeContent()
 end
 
 while true do
+    turtle.select(1);
     os.sleep(1);
     local content = analyeAndMoveConent();
     sendContentUpdate(content);
