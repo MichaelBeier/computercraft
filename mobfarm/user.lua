@@ -11,6 +11,7 @@ function run(config)
 	interface.render(state)
 
 	local jobTimer = os.startTimer(1)
+	controllerCommunicator.sendDataRequest()
 
 	while true do
 		local eventType, arg1, arg2, arg3, arg4 = os.pullEvent()
