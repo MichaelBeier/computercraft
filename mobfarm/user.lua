@@ -129,7 +129,7 @@ function createInterface(config, peripherals)
 end
 
 function createSelectionRenderer(monitor)
-	local buttons
+	local mobButtons = {}
 	local headerHeight = 3
 	local footerHeight = 3
 	local minListPadding = 1
@@ -204,10 +204,24 @@ function createSelectionRenderer(monitor)
 
 				local textStart = math.floor((buttonWidth - textLength) / 2)
 
+				local endX = colStartX + buttonWidth - 1
+				local endY = yPos + buttonHeight - 1
+
 				monitor.setCursorPos(colStartX, yPos)
-				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth - 1, yPos + buttonHeight - 1, colors.lime)
+				drawFilledBox(monitor, colStartX, yPos, endX, endY, colors.lime)
 				monitor.setCursorPos(colStartX + textStart, yPos + math.floor(buttonHeight / 2))
 				writeInColor(monitor, text, colors.white, colors.lime)
+
+				table.insert(
+					mobButtons,
+					{
+						startX = colStartX,
+						startY = yPos,
+						endX = endX,
+						endY = endY,
+						key = mob.id
+					}
+				)
 			end
 
 			monitor.setCursorPos(1, yPos + buttonHeight + buttonSpacing)
