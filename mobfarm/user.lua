@@ -84,7 +84,7 @@ function run(config)
 			interface.handleMouseClick(state, eventType, arg1, arg2, arg3, arg4)
 			interface.render(state)
 		elseif eventType == "mob_click" then
-			print("mob click", arg1)
+			controllerCommunicator.sendJobRequest(arg1, "infinite")
 		elseif eventType == "change_page" then
 			state.page = arg1
 			interface.render(state)
@@ -94,7 +94,7 @@ function run(config)
 			controllerCommunicator.handleRednetMessage(state, arg1, arg2)
 			interface.render(state)
 		elseif eventType == "timer" then
-			controllerCommunicator.requestData()
+			controllerCommunicator.sendDataRequest()
 		end
 
 		os.startTimer(1)
@@ -102,15 +102,21 @@ function run(config)
 end
 
 function createControllerCommunicator(config)
-	function requestData()
+	function sendDataRequest()
+		print("sending data request")
+	end
+
+	function sendJobRequest(key, count)
+		print("sending job request", key)
 	end
 
 	function handleRednetMessage(state, senderId, message)
 	end
 
 	return {
-		requestData = requestData,
-		handleRednetMessage = handleRednetMessage
+		handleRednetMessage = handleRednetMessage,
+		sendJobRequest = sendJobRequest,
+		sendDataRequest = sendDataRequest
 	}
 end
 
@@ -324,6 +330,7 @@ function createSelectionRenderer(monitor)
 
 		if (buttonKey == "previous") then
 			os.queueEvent("change_page", math.max(state.page - 1, 1))
+			return
 		end
 
 		os.queueEvent("mob_click", buttonKey)
