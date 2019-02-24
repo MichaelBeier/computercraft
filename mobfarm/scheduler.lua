@@ -23,6 +23,7 @@ function processMessage(message, protocol)
         print("new job is this:" .. message);
         -- {priority ("user", AE"), id, count, item, }
         -- {priority, count, item, progress}
+        job[3] = findItem(job);
         table.insert(job,0);
         if #jobs == 0 then
             print("currently no other jobs");
@@ -73,6 +74,15 @@ function findMob(job)
     for i = 1, #schedulerConfig do
         if schedulerConfig[i][2] == job[3] then
             return schedulerConfig[i][3];
+        end
+    end
+    return 0;
+end
+
+function findItem(job)
+    for i = 1, #schedulerConfig do
+        if schedulerConfig[i][1] == job[3] then
+            return schedulerConfig[i][2];
         end
     end
     return 0;
