@@ -68,7 +68,7 @@ function createSelectionRenderer(monitor)
 	local headerHeight = 3
 	local footerHeight = 3
 	local minListPadding = 1
-	local buttonWidth = 6
+	local buttonWidth = 12
 	local buttonSpacing = 1
 	local buttonHeight = 1
 
@@ -108,6 +108,8 @@ function createSelectionRenderer(monitor)
 		local startPosY = listSpaceStartY + math.max(minListPadding, math.floor(remainingYSpace / 2))
 		local startPosX = math.max(minListPadding, math.floor(remainingXSpace / 2))
 
+		advanceLines(minListPadding)
+
 		for rowIndex = 1, rowCount do
 			local _, yPos = monitor.getCursorPos()
 
@@ -120,10 +122,15 @@ function createSelectionRenderer(monitor)
 
 				local colStartX = startPosX + (colIndex - 1) * (buttonWidth + buttonSpacing)
 
+				local text = string.sub(mob.name, 1, buttonWidth - 2)
+				local textLength = string.len(text)
+
+				local textStart = math.floor((buttonWidth - textLength - 2) / 2)
+
+				monitor.setCursorPos(colStartX + textStart, yPos)
+				writeInColor(monitor, text, colors.white)
 				monitor.setCursorPos(colStartX, yPos)
 				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth - 1, yPos + buttonHeight - 1, colors.lime)
-				monitor.setCursorPos(colStartX + 1, yPos)
-				writeInColor(monitor, mob.name, colors.white, colors.lime)
 			end
 
 			advanceLines(monitor, buttonHeight + buttonSpacing)
