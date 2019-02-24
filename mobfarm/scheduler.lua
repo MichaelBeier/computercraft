@@ -60,7 +60,7 @@ function processMessage(message, protocol)
                 end
             end
         end
-        for j = 1, #jobs do
+        for j = #jobs, 1, -1 do
             if jobs[j][4] >= jobs[j][2] then
                 -- job finished
                 table.remove(jobs, j);
