@@ -24,6 +24,7 @@ end
 
 function sendContentUpdate(content)
     if content ~= nil then
+        print("not nil");
         local text = textutils.serialize(content);
         print(text);
     end
