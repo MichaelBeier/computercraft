@@ -1,3 +1,38 @@
+local itemToID ={};
+
+function downloadConfig()
+    local content = download("https://gitlab.com/michaelbeier/computercraftcollection/raw/master/mobfarm/ae_config")
+    local configHandle = fs.open("config", "w");
+    configHandle.write(content);
+    configHandle.flush();
+    configHandle.close();
+end
+
+function download(url)
+	local httpResponse = http.get(url)
+
+	local statusCode = httpResponse.getResponseCode()
+
+	if statusCode ~= 200 then
+		return nil
+	end
+
+	local scriptContent = httpResponse.readAll()
+	return scriptContent
+end
+
+function loadConfig()
+    downloadConfig();
+
+    local configHandle = fs.open("config", "r");
+    local configContent = configHandle.readAll();
+    local config = textutils.unserialize(configContent);
+
+    configHandle.close();
+
+    itemToID = config;
+end
+
 function analyeAndMoveConent()
     local content = analyzeContent();
     if #content > 0 then
@@ -25,6 +60,31 @@ function sendContentUpdate(content)
         local text = textutils.serialize(content);
         print(text);
     end
+
+    local messageTable = content;
+    
+    for i=1, #messageTable do
+        messageTable[i][2] = getID(messageTable[i][2]); 
+    end
+
+    for i=1, #messageTable do
+       sendNewJob(messageTable[i]);
+    end
+end
+
+function getID(text)
+    for i = 1, #itemToID do
+        if itemToID[i][1] == text then
+            return itemToID[i][2];
+        end
+    end
+    return 0;
+end
+
+function sendNewJob(job)
+    local id = rednet.lookup("newJob", "scheduler");
+    local message = textutils.serialize(job);
+    rednet.send(id, message, "newJob");
 end
 
 function analyzeContent()

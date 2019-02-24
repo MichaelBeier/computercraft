@@ -5,6 +5,9 @@ local priomapping = {"user", "AE"};
 
 function startup()
     rednet.open("top");
+    rednet.host("newJob", "scheduler");
+    rednet.host("jobQuery", "scheduler");
+    rednet.host("currentJob", "scheduler");
 end
 
 function processMessage(message, protocol)
