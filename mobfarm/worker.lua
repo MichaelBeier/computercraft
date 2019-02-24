@@ -17,6 +17,19 @@ function downloadConfig()
     configHandle.close();
 end
 
+function download(url)
+	local httpResponse = http.get(url)
+
+	local statusCode = httpResponse.getResponseCode()
+
+	if statusCode ~= 200 then
+		return nil
+	end
+
+	local scriptContent = httpResponse.readAll()
+	return scriptContent
+end
+
 function loadConfig()
     downloadConfig();
 
