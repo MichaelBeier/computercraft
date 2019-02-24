@@ -69,7 +69,7 @@ function sendContentUpdate(content)
     local messageTable = content;
     
     for i=1, #messageTable do
-        messageTable[i][2] = getID(messageTable[i][2]); 
+        messageTable[i][1] = getID(messageTable[i][1]); 
     end
 
     for i=1, #messageTable do
