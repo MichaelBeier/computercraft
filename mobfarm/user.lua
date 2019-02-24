@@ -125,7 +125,7 @@ function createSelectionRenderer(monitor)
 				writeInColor(monitor, mob.name, "white")
 			end
 
-			advanceLines(buttonHeight + buttonSpacing)
+			advanceLines(monitor, buttonHeight + buttonSpacing)
 		end
 
 		-- print(
@@ -197,7 +197,7 @@ function drawFilledBox(output, startX, startY, endX, endY, colors)
 	term.redirect(originalTerminal)
 end
 
-function advanceLines(count)
+function advanceLines(monitor, count)
 	local _, y = monitor.getCursorPos()
 	monitor.setCursorPos(1, y + count)
 end
