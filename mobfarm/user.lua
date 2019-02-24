@@ -78,7 +78,7 @@ function createSelectionRenderer(monitor)
 	local headerHeight = 3
 	local footerHeight = 3
 	local minListPadding = 1
-	local buttonWidth = 12
+	local buttonWidth = 16
 	local buttonSpacing = 1
 	local buttonHeight = 1
 
@@ -100,6 +100,18 @@ function createSelectionRenderer(monitor)
 	end
 
 	function renderList(state, sizeX, sizeY)
+		local longestName
+
+		for i = 1, #state.mobs do
+			if longestName == nil or string.len(state.mobs[i]) > string.len(longestName) then
+				longestName = state.mobs[i]
+			end
+		end
+
+		if longestName ~= nil then
+			buttonWidth = string.len(longestName) + 2
+		end
+
 		local availableXSpace = sizeX - minListPadding * 2
 		local availableYSpace = sizeY - minListPadding * 2 - headerHeight - footerHeight
 
@@ -140,7 +152,7 @@ function createSelectionRenderer(monitor)
 				monitor.setCursorPos(colStartX, yPos)
 				drawFilledBox(monitor, colStartX, yPos, colStartX + buttonWidth - 1, yPos + buttonHeight - 1, colors.lime)
 				monitor.setCursorPos(colStartX + textStart, yPos)
-				writeInColor(monitor, text, colors.white)
+				writeInColor(monitor, text, colors.white, colors.lime)
 			end
 
 			advanceLines(monitor, buttonHeight + buttonSpacing)
