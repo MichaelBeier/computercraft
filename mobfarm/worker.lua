@@ -95,7 +95,7 @@ function getJob()
     rednet.send(id, message, "currentJob");
 
     local senderID, answer, protocol = rednet.receive()
-    if answer == nil or answer == "" then 
+    if answer == nil or answer == "{0}" then 
         return;
     end 
     local job = textutils.unserialize(answer);
