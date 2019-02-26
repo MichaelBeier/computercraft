@@ -19,7 +19,28 @@ local recipes = {
 		"thermalfoundation:material",
 		"immersiveengineering:material",
 		"thermalfoundation:material"
-	} --hardended cell frame
+	}, --hardended cell frame,
+	{
+		"actuallyadditions:block_crystal",
+		"mekanism:ingot",
+		"minecraft:bone_block",
+		"minecraft:quartz_block",
+		"nuclearcraft:gem"
+	}, --empowered enori
+	{
+		"actuallyadditions:block_crystal",
+		"tconstruct:tool_rod",
+		"minecraft:red_nether_brick",
+		"nuclearcraft:gem",
+		"thermalfoundation:material"
+	}, --empowered restonia
+	{
+		"actuallyadditions:block_crystal",
+		"chisel:basalt2",
+		"extendedcrafting:storage",
+		"actuallyadditions:block_misc",
+		"minecraft:dye"
+	} -- empowered void
 }
 
 function checkForRecipe()
