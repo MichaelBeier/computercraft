@@ -40,7 +40,21 @@ local recipes = {
 		"extendedcrafting:storage",
 		"actuallyadditions:block_misc",
 		"minecraft:dye"
-	} -- empowered void
+	}, -- empowered void
+	{
+		"actuallyadditions:block_crystal",
+		"minecraft:dye",
+		"minecraft:emerald",
+		"actuallyadditions:block_testifi_bucks_green_wall",
+		"nuclearcraft:dust"
+	}, -- empowered emeradic
+	{
+		"actuallyadditions:block_crystal",
+		"botania:manaresource",
+		"tconstruct:ingots",
+		"biomesoplenty:gem",
+		"nuclearcraft:dust"
+	} -- empowered diamantine
 }
 
 function checkForRecipe()
