@@ -57,9 +57,9 @@ function createControllerCommunicator(config)
 			controllerId,
 			textutils.serialize(
 				{
-					"user",
-					64,
-					key
+					priority="user",
+					count=64,
+					item=key
 				}
 			),
 			config.protocols.createJob
