@@ -3,4 +3,9 @@
     {dummy="minecraft:gold_ingot", item="industrialforegoing:pink_slime", mobID="pinkSlime", displayName="Pink Slime", toolSlot=3},
     {dummy="minecraft:cobblestone", item="minecraft:blaze_rod", mobID="blaze", displayName="Blaze", toolSlot=4},
     {dummy="minecraft:log", item="minecraft:ghast_tear", mobID="ghast", displayName="Ghast", toolSlot=5},
+    {dummy="minecraft:coal", item="minecraft:leather", mobID="cow", displayName="Cow", toolSlot=6},
+    {dummy="minecraft:flint", item="minecraft:wool", mobID="sheep", displayName="Sheep", toolSlot=7},
+    {dummy="minecraft:redstone", item="iceandfire:fire_dragon_heart", mobID="fireDragon", displayName="Fire Dragon", toolSlot=8},
+    {dummy="minecraft:quartz", item="minecraft:dye", mobID="squid", displayName="Squid", toolSlot=9},
+    {dummy="minecraft:rotten_flesh", item="thermalfoundation:material", mobID="blizz", displayName="Blizz", toolSlot=10},
 }
