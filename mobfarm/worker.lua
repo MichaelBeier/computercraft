@@ -60,7 +60,7 @@ function getJob()
 end
 
 function changeJob(newJob)
-    print(newJob[1]);
+    print(newJob);
     if newJob ~= currentJob then
         unloadJob()
         currentJob = newJob;
@@ -74,7 +74,7 @@ function unloadJob()
     end
 
     turtle.suck();
-    putItemBack(currentJob[1]);
+    putItemBack(currentJob);
 end
 
 function loadJob()
