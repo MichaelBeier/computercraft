@@ -82,10 +82,10 @@ function createControllerCommunicator(config)
 				table.insert(
 					newJobs,
 					{
-						name = jobData[3],
-						id = jobData[3],
-						requested = jobData[2],
-						done = jobData[4]
+						name = jobData.displayName,
+						id = jobData.mobID,
+						requested = jobData.count,
+						done = jobData.progress
 					}
 				)
 			end
@@ -104,8 +104,8 @@ function createControllerCommunicator(config)
 				table.insert(
 					newConfig,
 					{
-						name = configEntry[3],
-						id = configEntry[2],
+						name = configEntry.displayName,
+						id = configEntry.item,
 						active = false
 					}
 				)
