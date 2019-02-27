@@ -40,7 +40,6 @@ end
 
 function startup()
     rednet.open("left");
-    loadConfig();
     cleanUp();
 end
 
