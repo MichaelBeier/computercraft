@@ -76,6 +76,7 @@ end
 function fillJobInfo(job)
     for i = 1, #schedulerConfig do
         if schedulerConfig[i].item == job.item then
+            job.dummy = schedulerConfig[i].dummy;
             job.toolSlot = schedulerConfig[i].toolSlot;
             job.displayName = schedulerConfig[i].displayName;
             job.mobID = schedulerConfig[i].mobID;
@@ -84,6 +85,7 @@ function fillJobInfo(job)
 
     for i = 1, #schedulerConfig do
         if schedulerConfig[i].dummy == job.dummy then
+            job.item = schedulerConfig[i].item;
             job.toolSlot = schedulerConfig[i].toolSlot;
             job.displayName = schedulerConfig[i].displayName;
             job.mobID = schedulerConfig[i].mobID;
