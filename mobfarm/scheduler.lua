@@ -129,11 +129,11 @@ function translateJob(job)
     translated.priority = getPrio(job.priority);
 
     if job.item == "" then
-        job.item = findItem(job);
+        translated.item = findItem(job);
     end
 
     if job.toolSlot == "" then
-        job.toolSlot = findToolSlot(job);
+        translated.toolSlot = findToolSlot(job);
     end
 
     return translated;
