@@ -55,7 +55,7 @@ function processMessage(message, protocol)
         for i = 1, #content do
             for j = 1, #jobs do
                 if jobs[j].item == content[i].item then
-                    jobs[j].progess = jobs[j].progress + content[i].count;
+                    jobs[j].progress = jobs[j].progress + content[i].count;
                     break;
                 end
             end
