@@ -128,11 +128,11 @@ function translateJob(job)
     local translated = job;
     translated.priority = getPrio(job.priority);
 
-    if job.item == "" then
+    if job.item == "" or job.item == nil then
         translated.item = findItem(job);
     end
 
-    if job.toolSlot == "" then
+    if job.toolSlot == "" or job.toolSlot == nil  then
         translated.toolSlot = findToolSlot(job);
     end
 
