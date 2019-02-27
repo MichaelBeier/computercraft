@@ -73,22 +73,24 @@ function processMessage(message, protocol)
     end
 end
 
-function findToolSlot(job)
+function fillJobInfo(job)
     for i = 1, #schedulerConfig do
         if schedulerConfig[i].item == job.item then
-            return schedulerConfig[i].toolSlot;
+            job.toolSlot = schedulerConfig[i].toolSlot;
+            job.displayName = schedulerConfig[i].displayName;
+            job.mobID = schedulerConfig[i].mobID;
         end
     end
-    return 0;
-end
 
-function findItem(job)
     for i = 1, #schedulerConfig do
         if schedulerConfig[i].dummy == job.dummy then
-            return schedulerConfig[i].item;
+            job.toolSlot = schedulerConfig[i].toolSlot;
+            job.displayName = schedulerConfig[i].displayName;
+            job.mobID = schedulerConfig[i].mobID;
         end
     end
-    return 0;
+
+    return job;
 end
 
 function downloadConfig()
@@ -128,13 +130,7 @@ function translateJob(job)
     local translated = job;
     translated.priority = getPrio(job.priority);
 
-    if job.item == "" or job.item == nil then
-        translated.item = findItem(job);
-    end
-
-    if job.toolSlot == "" or job.toolSlot == nil  then
-        translated.toolSlot = findToolSlot(job);
-    end
+    translated = fillJobInfo(job);
 
     return translated;
 end
