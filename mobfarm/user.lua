@@ -41,10 +41,10 @@ end
 
 function createControllerCommunicator(config)
 	local controllerId = rednet.lookup(config.protocols.createJob)
-	
+
 	if controllerId == nil then
-	    os.sleep(1)
-	    return createControllerCommunicator(config)
+		os.sleep(1)
+		return createControllerCommunicator(config)
 	end
 
 	local sendDataRequest = function()
@@ -228,7 +228,8 @@ function createSelectionRenderer(monitor)
 			local _, yPos = monitor.getCursorPos()
 
 			for colIndex = 1, colCount do
-				local mob = state.selectionItems[(rowIndex - 1) * rowCount + colIndex + itemStartIndex]
+				local itemIndex = (rowIndex - 1) * colCount + colIndex + itemStartIndex
+				local mob = state.selectionItems[itemIndex]
 
 				if (mob == nil) then
 					break
