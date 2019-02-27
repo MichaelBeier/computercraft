@@ -1,4 +1,6 @@
 {
-    {"minecraft:iron_ingot", "minecraft:skull", "wither"},
-    {"minecraft:gold_ingot", "industrialforegoing:pink_slime", "pinkSlime"}
+    {dummy="minecraft:iron_ingot", item="minecraft:skull", mobID="wither", displayName="Wither Skeleton", toolSlot=2},
+    {dummy="minecraft:gold_ingot", item="industrialforegoing:pink_slime", mobID="pinkSlime", displayName="Pink Slime", toolSlot=3},
+    {dummy="minecraft:cobblestone", item="minecraft:blaze_rod", mobID="blaze", displayName="Blaze", toolSlot=4},
+    {dummy="minecraft:log", item="minecraft:ghast_tear", mobID="ghast", displayName="Ghast", toolSlot=5},
 }

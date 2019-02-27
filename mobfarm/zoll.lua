@@ -42,7 +42,7 @@ function sendContentUpdate(content)
 end
 
 function analyzeContent()
-    local content = {};
+    local content;
 
     for i=1, 16 do
         if turtle.getItemCount(i) == 0 then
@@ -56,14 +56,14 @@ function analyzeContent()
         local stacked = false
 
         for j=1, #content do
-            if content[j][1] == itemName then
-                content[j][2] = content[j][2] + itemCount;
+            if content[j].item == itemName then
+                content[j].count = content[j].count + itemCount;
                 stacked = true;
             end
         end
 
         if not stacked then
-            table.insert(content, {itemName, itemCount});
+            table.insert(content, {item = itemName, count = itemCount});
         end
     end
 

@@ -1,41 +1,7 @@
 local itemToID ={};
 
-function downloadConfig()
-    local content = download("https://gitlab.com/michaelbeier/computercraftcollection/raw/master/mobfarm/ae_config")
-    local configHandle = fs.open("config", "w");
-    configHandle.write(content);
-    configHandle.flush();
-    configHandle.close();
-end
-
 function startup()
     rednet.open("left");
-    loadConfig();
-end
-
-function download(url)
-	local httpResponse = http.get(url)
-
-	local statusCode = httpResponse.getResponseCode()
-
-	if statusCode ~= 200 then
-		return nil
-	end
-
-	local scriptContent = httpResponse.readAll()
-	return scriptContent
-end
-
-function loadConfig()
-    downloadConfig();
-
-    local configHandle = fs.open("config", "r");
-    local configContent = configHandle.readAll();
-    local config = textutils.unserialize(configContent);
-
-    configHandle.close();
-
-    itemToID = config;
 end
 
 function analyeAndMoveConent()
@@ -73,17 +39,6 @@ function sendNewJobs(content)
     end
 end
 
-function getIDandItem(text)
-    for i = 1, #itemToID do
-        if itemToID[i][1] == text then
-            return itemToID[i][2],itemToID[i][3];
-        end
-    end
-    return 0;
-end
-
-
-
 function sendNewJob(job)
     local id = rednet.lookup("newJob", "scheduler");
     local message = textutils.serialize(job);
@@ -106,14 +61,14 @@ function analyzeContent()
         local stacked = false
 
         for j=1, #content do
-            if content[j][2] == itemName then
-                content[j][3] = content[j][3] + itemCount;
+            if content[j].dummy == itemName then
+                content[j].count = content[j].count + itemCount;
                 stacked = true;
             end
         end
 
         if not stacked then
-            table.insert(content, {"AE", itemCount, itemName});
+            table.insert(content, {priority="AE", count=itemCount, dummy=itemName});
         end
     end
 

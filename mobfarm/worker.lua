@@ -4,50 +4,7 @@ local spawnerLocation = "front";
 
 local spawner = peripheral.wrap(spawnerLocation);
 local chest = peripheral.wrap(chestLocation);
-local safariNets = {};
-local currentJob={0};
-
-function downloadConfig()
-    --os.loadAPI("startup.lua");
-
-    local content = download("https://gitlab.com/michaelbeier/computercraftcollection/raw/master/mobfarm/worker_config")
-    local configHandle = fs.open("config", "w");
-    configHandle.write(content);
-    configHandle.flush();
-    configHandle.close();
-end
-
-function download(url)
-	local httpResponse = http.get(url)
-
-	local statusCode = httpResponse.getResponseCode()
-
-	if statusCode ~= 200 then
-		return nil
-	end
-
-	local scriptContent = httpResponse.readAll()
-	return scriptContent
-end
-
-function loadConfig()
-    downloadConfig();
-
-    if not fs.exists("config") then
-        safariNets = {"NICHTSDAMITERNICHTAUSVERSEHENMATCHT", "witherSkeleton", "pinkSlime"};
-        local configHandle = fs.open("config", "w");
-        configHandle.write(textutils.serialize(safariNets));
-        return;
-    end
-
-    local configHandle = fs.open("config", "r");
-    local configContent = configHandle.readAll();
-    local config = textutils.unserialize(configContent);
-
-    configHandle.close();
-
-    safariNets = config;
-end
+local currentJob=0;
 
 function cleanUp()
     turtle.select(1);
@@ -94,42 +51,18 @@ function getJob()
     local message = "";
     rednet.send(id, message, "currentJob");
 
-    local senderID, answer, protocol = rednet.receive()
-    if answer == nil or answer == "{0}" then 
-        return {0};
-    end 
-    local job = textutils.unserialize(answer);
+    local senderID, answer, protocol;
 
-    print(job[1]);
-    return translateJob(job);
-end
-
-function translateJob(job)
-    print("translate job");
-    local slot = findSlot(job[1]);
-    
-    if slot == 0 then
-        return nil
+    while protocol ~= "currentJob" do
+        senderID, answer, protocol = rednet.receive()
     end
-
-    return {slot};
-end
-
-function findSlot(text)
-    print("find slot for " .. text);
-    for i=1, #safariNets do
-        print("safari: ".. safariNets[i]);
-        if string.find(safariNets[i], text) then
-            print("found slot");
-            return i;
-        end
-    end
-    return 0
+     
+    return answer;
 end
 
 function changeJob(newJob)
     print(newJob[1]);
-    if newJob[1] ~= currentJob[1] then
+    if newJob ~= currentJob then
         unloadJob()
         currentJob = newJob;
         loadJob()
@@ -137,7 +70,7 @@ function changeJob(newJob)
 end
 
 function unloadJob()
-    if currentJob[1] == 0 then
+    if currentJob == 0 then
         return 1;
     end
 
@@ -146,8 +79,8 @@ function unloadJob()
 end
 
 function loadJob()
-    if currentJob[1] ~= 0 then
-        chest.pushItems(spawnerLocation, currentJob[1], 1);
+    if currentJob ~= 0 then
+        chest.pushItems(spawnerLocation, currentJob, 1);
     end
 end
 

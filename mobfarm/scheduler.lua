@@ -25,28 +25,28 @@ function processMessage(message, protocol)
         print("new job is this:" .. message);
         -- {priority, count, item, progress}
         
-        table.insert(job,0);
+        job.progress=0;
+        local translated = translateJob(job);
+
         if #jobs == 0 then
-            print("currently no other jobs");
-            local translated = translateJob(job);
             table.insert(jobs, translated);
         else
-            local translated = translateJob(job);
             for i=1, #jobs do
-                if jobs[i][1] > translated[1] then
+                if jobs[i].priority > translated.priority then
                     return table.insert(jobs, i, translated);
                 end
             end
             return table.insert(jobs, translated);
         end
+
     elseif protocol == "currentJob" then
         print("received query from worker")
         if #jobs > 0 then
-            local mob = {findMob(jobs[1])};
-            print("sending to worker: " .. textutils.serialize(mob));
-            return textutils.serialize(mob);
+            local slot = jobs[1].toolSlot;
+            print("sending to worker: " .. slot);
+            return slot;
         else 
-            return "{0}";
+            return 0;
         end
     elseif protocol == "contentUpdate" then
         print("received contentUpdate");
@@ -54,14 +54,14 @@ function processMessage(message, protocol)
         
         for i = 1, #content do
             for j = 1, #jobs do
-                if jobs[j][3] == content[i][1] then
-                    jobs[j][4] = jobs[j][4] + content[i][2];
+                if jobs[j].item == content[i].item then
+                    jobs[j].progess = jobs[j].progress + content[i].count;
                     break;
                 end
             end
         end
         for j = #jobs, 1, -1 do
-            if jobs[j][4] >= jobs[j][2] then
+            if jobs[j].progress >= jobs[j].count then
                 -- job finished
                 table.remove(jobs, j);
             end
@@ -73,10 +73,10 @@ function processMessage(message, protocol)
     end
 end
 
-function findMob(job)
+function findToolSlot(job)
     for i = 1, #schedulerConfig do
-        if schedulerConfig[i][2] == job[3] then
-            return schedulerConfig[i][3];
+        if schedulerConfig[i].item == job.item then
+            return schedulerConfig[i].toolSlot;
         end
     end
     return 0;
@@ -84,8 +84,8 @@ end
 
 function findItem(job)
     for i = 1, #schedulerConfig do
-        if schedulerConfig[i][1] == job[3] then
-            return schedulerConfig[i][2];
+        if schedulerConfig[i].dummy == job.dummy then
+            return schedulerConfig[i].item;
         end
     end
     return 0;
@@ -126,10 +126,16 @@ end
 
 function translateJob(job)
     local translated = job;
-    translated[1] = getPrio(job[1]);
-    if translated[1] ~= 1 then
-        translated[3] = findItem(job);
+    translated.priority = getPrio(job.priority);
+
+    if job.item == "" then
+        job.item = findItem(job);
     end
+
+    if job.toolSlot == "" then
+        job.toolSlot = findToolSlot(job);
+    end
+
     return translated;
 end
 
