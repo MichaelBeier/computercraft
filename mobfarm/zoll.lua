@@ -52,6 +52,7 @@ function analyzeContent()
         local data = turtle.getItemDetail(i);
         local itemName = data.name;
         local itemCount = data.count;
+        local damage = data.damage;
 
         local stacked = false
 
@@ -63,7 +64,7 @@ function analyzeContent()
         end
 
         if not stacked then
-            table.insert(content, {item = itemName, count = itemCount});
+            table.insert(content, {item = itemName, count = itemCount, itemDamage=damage});
         end
     end
 

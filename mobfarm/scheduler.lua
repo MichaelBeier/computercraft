@@ -54,7 +54,7 @@ function processMessage(message, protocol)
         
         for i = 1, #content do
             for j = 1, #jobs do
-                if jobs[j].item == content[i].item then
+                if jobs[j].item == content[i].item and jobs[j].itemDamage == content[i].itemDamage then
                     jobs[j].progress = jobs[j].progress + content[i].count;
                     break;
                 end
@@ -77,6 +77,7 @@ function fillJobInfo(job)
     for i = 1, #schedulerConfig do
         if schedulerConfig[i].item == job.item then
             job.dummy = schedulerConfig[i].dummy;
+            job.dummyDamage = schedulerConfig[i].dummyDamage;
             job.toolSlot = schedulerConfig[i].toolSlot;
             job.displayName = schedulerConfig[i].displayName;
             job.mobID = schedulerConfig[i].mobID;
@@ -86,6 +87,7 @@ function fillJobInfo(job)
     for i = 1, #schedulerConfig do
         if schedulerConfig[i].dummy == job.dummy then
             job.item = schedulerConfig[i].item;
+            job.itemDamage = schedulerConfig[i].itemDamage;
             job.toolSlot = schedulerConfig[i].toolSlot;
             job.displayName = schedulerConfig[i].displayName;
             job.mobID = schedulerConfig[i].mobID;
