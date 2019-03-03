@@ -486,7 +486,7 @@ function createJobStartRenderer(monitor)
 				x = posX,
 				y = posY + 4,
 				height = 3,
-				width = x + 6,
+				width = x - posX + 6,
 				color = colors.white,
 				background = colors.red,
 				text = "start",
