@@ -403,7 +403,7 @@ function createLoggerRenderer(monitor)
 end
 
 function createButtonRenderer(monitor)
-	local buttons
+	local buttons = {}
 
 	local function createButton(button)
 		local buttonColor = button.color ~= nil and button.color or colors.white
