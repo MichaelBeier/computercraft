@@ -413,7 +413,8 @@ function createButtonRenderer(monitor)
 		local endY = button.y + button.height - 1
 
 		local maxTextWidth = button.width - 2
-		local textLen = string.len(button.text)
+		local text = button.text
+		local textLen = string.len(text)
 
 		if (textLen > maxTextWidth) then
 			textLen = maxTextWidth
@@ -422,8 +423,8 @@ function createButtonRenderer(monitor)
 
 		local textStart = math.floor((maxTextWidth - textLen) / 2)
 
-		monitor.setCursorPos(x, y)
-		drawFilledBox(monitor, x, y, endX, endY, buttonBackground)
+		monitor.setCursorPos(button.x, button.y)
+		drawFilledBox(monitor, button.x, button.y, endX, endY, buttonBackground)
 		monitor.setCursorPos(button.x + textStart, button.y + math.floor(button.height / 2))
 		writeInColor(monitor, text, buttonColor, buttonBackground)
 
@@ -434,7 +435,7 @@ function createButtonRenderer(monitor)
 				startY = button.y,
 				endX = endX,
 				endY = endY,
-				key = key
+				key = button.key
 			}
 		)
 	end
