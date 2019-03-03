@@ -662,6 +662,7 @@ function createDisplayBuffer(monitor)
 	local function next()
 		local sizeX, sizeY = monitor.getSize()
 		nextWindow = window.create(monitor, 1, 1, sizeX, sizeY, false)
+		return nextWindow
 	end
 
 	local function swap()
