@@ -162,20 +162,29 @@ function createInterface(config, peripherals)
 	local selectorMonitor = peripherals.selectorMonitor
 	local loggerMonitor = peripherals.loggerMonitor
 
-	local selectionRenderer = createSelectionRenderer(selectorMonitor)
-	local jobStartRenderer = createJobStartRenderer(selectorMonitor)
-	local loggerRenderer = createLoggerRenderer(loggerMonitor)
+	local mainMonitorBuffer = createDisplayBuffer(selectorMonitor)
+	local loggerMonitorBuffer = createDisplayBuffer(loggerMonitor)
+
+	local selectionRenderer = createSelectionRenderer()
+	local jobStartRenderer = createJobStartRenderer()
+	local loggerRenderer = createLoggerRenderer()
 
 	local render = function(state)
-		term.redirect(selectorMonitor)
+		local mainWindow = mainMonitorBuffer.next()
+		local loggerWindow = loggerMonitorBuffer.next()
+
+		term.redirect(mainWindow)
 		if (state.jobRequest == nil) then
-			selectionRenderer.render(state)
+			selectionRenderer.render(mainWindow, state)
 		else
-			jobStartRenderer.render(state)
+			jobStartRenderer.render(mainWindow, state)
 		end
-		term.redirect(loggerMonitor)
-		loggerRenderer.render(state)
+		term.redirect(loggerWindow)
+		loggerRenderer.render(loggerWindow, state)
 		term.redirect(term.native())
+
+		mainMonitorBuffer.swap()
+		loggerMonitorBuffer.swap()
 	end
 
 	local handleMouseClick = function(state, eventType, side, x, y)
@@ -200,7 +209,7 @@ end
 local headerHeight = 3
 local footerHeight = 3
 
-function createSelectionRenderer(monitor)
+function createSelectionRenderer()
 	local minListPadding = 1
 	local buttonWidth = 16
 	local buttonSpacing = 1
@@ -208,7 +217,6 @@ function createSelectionRenderer(monitor)
 	local pageCount = 1
 	local startPosX
 	local buttonRenderer
-	local displayBuffer = createDisplayBuffer(monitor)
 
 	local renderHeader = function(monitor, state, sizeX)
 		monitor.setCursorPos(1, 1)
@@ -330,17 +338,14 @@ function createSelectionRenderer(monitor)
 		end
 	end
 
-	local render = function(state)
-		local nextWindow = displayBuffer.next()
-		buttonRenderer = createButtonRenderer(nextWindow)
+	local render = function(monitor, state)
+		buttonRenderer = createButtonRenderer(monitor)
 
-		local sizeX, sizeY = nextWindow.getSize()
+		local sizeX, sizeY = monitor.getSize()
 
-		renderList(nextWindow, state, sizeX, sizeY)
-		renderHeader(nextWindow, state, sizeX)
-		renderFooter(nextWindow, state, sizeX, sizeY)
-
-		displayBuffer.swap()
+		renderList(monitor, state, sizeX, sizeY)
+		renderHeader(monitor, state, sizeX)
+		renderFooter(monitor, state, sizeX, sizeY)
 	end
 
 	local handleMouseClick = function(state, x, y)
@@ -369,10 +374,10 @@ function createSelectionRenderer(monitor)
 	}
 end
 
-function createJobStartRenderer(monitor)
+function createJobStartRenderer()
 	local buttonRenderer
 
-	local function renderHeader(state, sizeX, sizeY)
+	local function renderHeader(monitor, state, sizeX, sizeY)
 		drawFilledBox(monitor, 1, 1, sizeX, headerHeight, colors.white)
 		monitor.setCursorPos(2, 2)
 		writeInColor(monitor, "Please select an amount", colors.green, colors.white)
@@ -391,7 +396,7 @@ function createJobStartRenderer(monitor)
 		)
 	end
 
-	local function renderContent(state, sizeX, sizeY)
+	local function renderContent(monitor, state, sizeX, sizeY)
 		local selectedItem =
 			findInArray(
 			state.selectionItems,
@@ -498,14 +503,12 @@ function createJobStartRenderer(monitor)
 		)
 	end
 
-	local function render(state)
-		monitor.setBackgroundColor(colors.black)
-		monitor.clear()
+	local function render(monitor, state)
 		local sizeX, sizeY = monitor.getSize()
 		buttonRenderer = createButtonRenderer(monitor)
 
-		renderHeader(state, sizeX, sizeY)
-		renderContent(state, sizeX, sizeY)
+		renderHeader(monitor, state, sizeX, sizeY)
+		renderContent(monitor, state, sizeX, sizeY)
 	end
 
 	local function handleMouseClick(state, x, y)
@@ -537,19 +540,19 @@ function createJobStartRenderer(monitor)
 	}
 end
 
-function createLoggerRenderer(monitor)
+function createLoggerRenderer()
 	local buttons = {}
 	local listEntryHeight = 1
 	local minListPadding = 1
 	local listEntrySpacing = 1
 
-	local renderHeader = function(state, sizeX, sizeY)
+	local renderHeader = function(monitor, state, sizeX, sizeY)
 		drawFilledBox(monitor, 1, 1, sizeX, headerHeight, colors.white)
 		monitor.setCursorPos(2, 2)
 		writeInColor(monitor, "Jobs", colors.green, colors.white)
 	end
 
-	local renderList = function(state, sizeX, sizeY)
+	local renderList = function(monitor, state, sizeX, sizeY)
 		monitor.setCursorPos(1, headerHeight + 2)
 
 		local availableYSpace = sizeY - headerHeight - footerHeight - minListPadding * 2
@@ -569,20 +572,18 @@ function createLoggerRenderer(monitor)
 		end
 	end
 
-	local renderFooter = function(state, sizeX, sizeY)
+	local renderFooter = function(monitor, state, sizeX, sizeY)
 		local startPosY = sizeY - footerHeight + 1
 		monitor.setCursorPos(1, startPosY)
 
 		drawFilledBox(monitor, 1, startPosY, sizeX, footerHeight, colors.white)
 	end
 
-	local render = function(state)
-		monitor.setBackgroundColor(colors.black)
-		monitor.clear()
+	local render = function(monitor, state)
 		local sizeX, sizeY = monitor.getSize()
-		renderHeader(state, sizeX, sizeY)
-		renderList(state, sizeX, sizeY)
-		renderFooter(state, sizeX, sizeY)
+		renderHeader(monitor, state, sizeX, sizeY)
+		renderList(monitor, state, sizeX, sizeY)
+		renderFooter(monitor, state, sizeX, sizeY)
 	end
 
 	local handleMouseClick = function(state, x, y)
@@ -666,11 +667,11 @@ function createDisplayBuffer(monitor)
 	end
 
 	local function swap()
+		nextWindow.setVisible(true)
 		if (currentWindow ~= nil) then
 			currentWindow.setVisible(false)
+			currentWindow.redraw()
 		end
-		nextWindow.setVisible(true)
-		nextWindow.redraw()
 		currentWindow = nextWindow
 	end
 
