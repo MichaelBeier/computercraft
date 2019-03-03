@@ -77,7 +77,7 @@ function createControllerCommunicator(config)
 			textutils.serialize(
 				{
 					priority = "user",
-					count = 64,
+					count = count,
 					item = key
 				}
 			)
@@ -486,7 +486,7 @@ function createJobStartRenderer(monitor)
 				x = posX,
 				y = posY + 4,
 				height = 3,
-				width = 40,
+				width = x + 6,
 				color = colors.white,
 				background = colors.red,
 				text = "start",
