@@ -404,7 +404,7 @@ function createJobStartRenderer(monitor)
 		local remainingSizeY = sizeY - headerHeight - 2 - footerHeight - 2 - 2
 
 		local posY = headerHeight + 4 + math.floor((remainingSizeY - 3) / 2)
-		local posX = math.floor((sizeX - (5 * 8)) / 2)
+		local posX = math.floor((sizeX - (5 * 7) - 1) / 2)
 
 		local x = posX
 
