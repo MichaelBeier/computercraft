@@ -421,7 +421,7 @@ function createButtonRenderer(monitor)
 			text = string.sub(text, 1, textLen)
 		end
 
-		local textStart = math.floor((maxTextWidth - textLen) / 2)
+		local textStart = math.floor((button.width - textLen) / 2)
 
 		monitor.setCursorPos(button.x, button.y)
 		drawFilledBox(monitor, button.x, button.y, endX, endY, buttonBackground)
