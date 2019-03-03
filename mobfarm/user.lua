@@ -47,23 +47,28 @@ function createControllerCommunicator(config)
 		return createControllerCommunicator(config)
 	end
 
+	local sendMessage = function(protocol, content)
+		return rednet.send(controllerId, content, protocol)
+	end
+
 	local sendDataRequest = function()
-		rednet.send(controllerId, nil, config.protocols.getConfig)
-		rednet.send(controllerId, nil, config.protocols.queryJobs)
+		sendMessage(config.protocols.getConfig)
+		sendMessage(config.protocols.queryJobs)
 	end
 
 	local sendJobRequest = function(key, count)
-		rednet.send(
-			controllerId,
+		sendMessage(
+			config.protocols.createJob,
 			textutils.serialize(
 				{
-					priority="user",
-					count=64,
-					item=key
+					priority = "user",
+					count = 64,
+					item = key
 				}
-			),
-			config.protocols.createJob
+			)
 		)
+
+		sendMessage(config.protocols.queryJobs)
 	end
 
 	local handleRednetMessage = function(state, senderId, protocol, message)
@@ -358,6 +363,8 @@ function createLoggerRenderer(monitor)
 
 	local renderHeader = function(state, sizeX, sizeY)
 		drawFilledBox(monitor, 1, 1, sizeX, headerHeight, colors.white)
+		monitor.setCursorPos(2, 2)
+		writeInColor(monitor, "Jobs", colors.green, colors.white)
 	end
 
 	local renderList = function(state, sizeX, sizeY)
@@ -367,10 +374,16 @@ function createLoggerRenderer(monitor)
 
 		local rowCount = math.floor(availableYSpace)
 
+		local startY = headerHeight + 2
+
 		for i = 1, #state.jobs do
 			local job = state.jobs[i]
 
-			print("name", job.name, "id", job.id, "request", job.requested, "done", job.done)
+			local posY = startY + (i - 1) * (listEntryHeight + listEntrySpacing)
+
+			monitor.setCursorPos(2, posY)
+			writeInColor(monitor, job.name .. " [" .. job.done .. "/" .. job.requested .. "]", colors.white)
+			advanceLines(monitor, 2)
 		end
 	end
 
