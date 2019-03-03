@@ -208,8 +208,9 @@ function createSelectionRenderer(monitor)
 	local pageCount = 1
 	local startPosX
 	local buttonRenderer
+	local displayBuffer = createDisplayBuffer(monitor)
 
-	local renderHeader = function(state, sizeX)
+	local renderHeader = function(monitor, state, sizeX)
 		monitor.setCursorPos(1, 1)
 		drawFilledBox(monitor, 1, 1, sizeX, 3, colors.white)
 		monitor.setCursorPos(startPosX, 2)
@@ -217,7 +218,7 @@ function createSelectionRenderer(monitor)
 		monitor.setCursorPos(1, 1 + headerHeight)
 	end
 
-	local renderList = function(state, sizeX, sizeY)
+	local renderList = function(monitor, state, sizeX, sizeY)
 		monitor.setCursorPos(1, headerHeight + 1)
 
 		local longestName
@@ -285,7 +286,7 @@ function createSelectionRenderer(monitor)
 		end
 	end
 
-	local renderFooter = function(state, sizeX, sizeY)
+	local renderFooter = function(monitor, state, sizeX, sizeY)
 		local startPosY = sizeY - footerHeight + 1
 		monitor.setCursorPos(1, startPosY)
 
@@ -330,14 +331,16 @@ function createSelectionRenderer(monitor)
 	end
 
 	local render = function(state)
-		buttonRenderer = createButtonRenderer(monitor)
-		monitor.setBackgroundColor(colors.black)
-		monitor.clear()
-		local sizeX, sizeY = monitor.getSize()
+		local nextWindow = displayBuffer.next()
+		buttonRenderer = createButtonRenderer(nextWindow)
 
-		renderList(state, sizeX, sizeY)
-		renderHeader(state, sizeX)
-		renderFooter(state, sizeX, sizeY)
+		local sizeX, sizeY = nextWindow.getSize()
+
+		renderList(nextWindow, state, sizeX, sizeY)
+		renderHeader(nextWindow, state, sizeX)
+		renderFooter(nextWindow, state, sizeX, sizeY)
+
+		displayBuffer.swap()
 	end
 
 	local handleMouseClick = function(state, x, y)
@@ -649,6 +652,30 @@ function createButtonRenderer(monitor)
 	return {
 		createButton = createButton,
 		findButton = findButton
+	}
+end
+
+function createDisplayBuffer(monitor)
+	local currentWindow = nil
+	local nextWindow = nil
+
+	local function next()
+		local sizeX, sizeY = monitor.getSize()
+		nextWindow = window.create(monitor, 1, 1, sizeX, sizeY, false)
+	end
+
+	local function swap()
+		if (currentWindow ~= nil) then
+			currentWindow.setVisible(false)
+		end
+		nextWindow.setVisible(true)
+		nextWindow.redraw()
+		currentWindow = nextWindow
+	end
+
+	return {
+		next = next,
+		swap = swap
 	}
 end
 
