@@ -383,7 +383,7 @@ function createJobStartRenderer(monitor)
 		monitor.setBackgroundColor(colors.black)
 		monitor.clear()
 		local sizeX, sizeY = monitor.getSize()
-		buttonRenderer = createButtonRenderer()
+		buttonRenderer = createButtonRenderer(monitor)
 
 		renderHeader(state, sizeX, sizeY)
 	end
