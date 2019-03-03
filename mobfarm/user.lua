@@ -363,7 +363,7 @@ function createJobStartRenderer(monitor)
 	local function renderHeader(state, sizeX, sizeY)
 		drawFilledBox(monitor, 1, 1, sizeX, headerHeight, colors.white)
 		monitor.setCursorPos(2, 2)
-		writeInColor(monitor, "Jobs", colors.green, colors.white)
+		writeInColor(monitor, "Please select an amount", colors.green, colors.white)
 
 		buttonRenderer.createButton(
 			{
@@ -379,6 +379,50 @@ function createJobStartRenderer(monitor)
 		)
 	end
 
+	local function renderContent(state, sizeX, sizeY)
+		local selectedItem =
+			findInTable(
+			state.selectionItems,
+			function(item)
+				return item.id == state.jobRequest
+			end
+		)
+
+		monitor.setCursorPos(1, headerHeight + 2)
+		writeInColor(monitor, "Selected mob:", colors.white, colors.black)
+		writeInColor(monitor, selectedItem.name, colors.green, colors.black)
+
+		local remainingSizeY = sizeY - headerHeight - 2 - footerHeight - 2 - 2
+
+		local posY = math.floor((remainingSizeY - 3) / 2)
+
+		buttonRenderer.createButton(
+			{
+				x = 1,
+				y = posY,
+				height = 3,
+				width = 5,
+				color = colors.white,
+				background = colors.lime,
+				text = "-1",
+				key = -1
+			}
+		)
+
+		buttonRenderer.createButton(
+			{
+				x = 12,
+				y = posY,
+				height = 3,
+				width = 5,
+				color = colors.white,
+				background = colors.lime,
+				text = "+1",
+				key = 1
+			}
+		)
+	end
+
 	local function render(state)
 		monitor.setBackgroundColor(colors.black)
 		monitor.clear()
@@ -386,10 +430,15 @@ function createJobStartRenderer(monitor)
 		buttonRenderer = createButtonRenderer(monitor)
 
 		renderHeader(state, sizeX, sizeY)
+		renderContent(state, sizeX, sizeY)
 	end
 
 	local function handleMouseClick(state, x, y)
 		local clickedButton = buttonRenderer.findButton(x, y)
+
+		if (clickedButton == nil) then
+			return
+		end
 
 		if (clickedButton == "back") then
 			os.queueEvent("job_request_cancel")
@@ -558,6 +607,18 @@ function printDebug(...)
 	term.redirect(term.native())
 	print(...)
 	term.redirect(originalTerminal)
+end
+
+function findInTable(haystack, fn)
+	for i = 1, #haystack do
+		local item = haystack[i]
+
+		if (fn(item)) then
+			return item
+		end
+	end
+
+	return nil
 end
 
 run(
