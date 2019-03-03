@@ -394,7 +394,7 @@ function createJobStartRenderer(monitor)
 		)
 
 		monitor.setCursorPos(1, headerHeight + 2)
-		writeInColor(monitor, "Selected mob:", colors.white, colors.black)
+		writeInColor(monitor, "Selected mob: ", colors.white, colors.black)
 		writeInColor(monitor, selectedItem.name, colors.green, colors.black)
 
 		local remainingSizeY = sizeY - headerHeight - 2 - footerHeight - 2 - 2
@@ -494,7 +494,7 @@ function createJobStartRenderer(monitor)
 			return
 		end
 
-		os.queueEvent("job_request_set_count", state.jobRequest.count + clickedButton.key)
+		os.queueEvent("job_request_set_count", state.jobRequest.count + clickedButton)
 	end
 
 	return {
