@@ -24,6 +24,9 @@ function run(config)
 			-- controllerCommunicator.sendJobRequest(arg1, "infinite")
 			state.jobRequest = arg1
 			interface.render(state)
+		elseif eventType == "job_request_cancel" then
+			state.jobRequest = nil
+			interface.render(state)
 		elseif eventType == "change_page" then
 			state.page = arg1
 			interface.render(state)
@@ -151,11 +154,16 @@ function createInterface(config, peripherals)
 	local loggerMonitor = peripherals.loggerMonitor
 
 	local selectionRenderer = createSelectionRenderer(selectorMonitor)
+	local jobStartRenderer = createJobStartRenderer(selectorMonitor)
 	local loggerRenderer = createLoggerRenderer(loggerMonitor)
 
 	local render = function(state)
 		term.redirect(selectorMonitor)
-		selectionRenderer.render(state)
+		if (state.jobRequest == nil) then
+			selectionRenderer.render(state)
+		else
+			jobStartRenderer.render(state)
+		end
 		term.redirect(loggerMonitor)
 		loggerRenderer.render(state)
 		term.redirect(term.native())
@@ -163,8 +171,13 @@ function createInterface(config, peripherals)
 
 	local handleMouseClick = function(state, eventType, side, x, y)
 		if side == config.selectorMonitor then
+			if (state.jobRequest ~= nil) then
+				return jobStartRenderer.handleMouseClick(state, x, y)
+			end
+
 			return selectionRenderer.handleMouseClick(state, x, y)
-		elseif side == config.loggerMonitor then
+		end
+		if side == config.loggerMonitor then
 			return loggerRenderer.handleMouseClick(state, x, y)
 		end
 	end
@@ -344,6 +357,53 @@ function createSelectionRenderer(monitor)
 	}
 end
 
+function createJobStartRenderer(monitor)
+	local buttonRenderer
+
+	local function renderHeader(state, sizeX, sizeY)
+		drawFilledBox(monitor, 1, 1, sizeX, headerHeight, colors.white)
+		monitor.setCursorPos(2, 2)
+		writeInColor(monitor, "Jobs", colors.green, colors.white)
+
+		buttonRenderer.createButton(
+			{
+				x = sizeX - 6,
+				y = 1,
+				width = 6,
+				height = 3,
+				text = "Back",
+				key = "back",
+				color = colors.black,
+				background = colors.white
+			}
+		)
+	end
+
+	local function render(state)
+		monitor.setBackgroundColor(colors.black)
+		monitor.clear()
+		local sizeX, sizeY = monitor.getSize()
+		buttonRenderer = createButtonRenderer()
+
+		renderHeader(state, sizeX, sizeY)
+	end
+
+	local function handleMouseClick(state, x, y)
+		local clickedButton = buttonRenderer.findButton(x, y)
+
+		if (clickedButton == "back") then
+			os.queueEvent("job_request_cancel")
+		end
+
+		printDebug(clickedButton)
+	end
+
+	return {
+		render = render,
+		handleMouseClick = handleMouseClick
+	}
+end
+
 function createLoggerRenderer(monitor)
 	local buttons = {}
 	local listEntryHeight = 1
@@ -491,6 +551,13 @@ end
 function advanceLines(monitor, count)
 	local _, y = monitor.getCursorPos()
 	monitor.setCursorPos(1, y + count)
+end
+
+function printDebug(...)
+	local originalTerminal = term.current()
+	term.redirect(term.native())
+	print(...)
+	term.redirect(originalTerminal)
 end
 
 run(
