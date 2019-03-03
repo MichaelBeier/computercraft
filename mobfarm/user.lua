@@ -32,6 +32,10 @@ function run(config)
 		elseif eventType == "job_request_cancel" then
 			state.jobRequest = nil
 			interface.render(state)
+		elseif eventType == "job_request_send" then
+			controllerCommunicator.sendJobRequest(state.jobRequest.id, state.jobRequest.count)
+			state.jobRequest = nil
+			interface.render(state)
 		elseif eventType == "change_page" then
 			state.page = arg1
 			interface.render(state)
@@ -393,18 +397,20 @@ function createJobStartRenderer(monitor)
 			end
 		)
 
-		monitor.setCursorPos(1, headerHeight + 2)
+		monitor.setCursorPos(2, headerHeight + 2)
 		writeInColor(monitor, "Selected mob: ", colors.white, colors.black)
 		writeInColor(monitor, selectedItem.name, colors.green, colors.black)
 
 		local remainingSizeY = sizeY - headerHeight - 2 - footerHeight - 2 - 2
 
 		local posY = headerHeight + 4 + math.floor((remainingSizeY - 3) / 2)
-		local posX = math.floor((sizeX - (32 + 6)) / 2)
+		local posX = math.floor((sizeX - (5 * 8)) / 2)
+
+		local x = posX
 
 		buttonRenderer.createButton(
 			{
-				x = posX,
+				x = x,
 				y = posY,
 				height = 3,
 				width = 6,
@@ -415,9 +421,11 @@ function createJobStartRenderer(monitor)
 			}
 		)
 
+		x = x + 7
+
 		buttonRenderer.createButton(
 			{
-				x = posX + 8,
+				x = x,
 				y = posY,
 				height = 3,
 				width = 6,
@@ -428,9 +436,11 @@ function createJobStartRenderer(monitor)
 			}
 		)
 
+		x = x + 7
+
 		buttonRenderer.createButton(
 			{
-				x = posX + 16,
+				x = x,
 				y = posY,
 				height = 3,
 				width = 6,
@@ -441,9 +451,11 @@ function createJobStartRenderer(monitor)
 			}
 		)
 
+		x = x + 7
+
 		buttonRenderer.createButton(
 			{
-				x = posX + 21,
+				x = x,
 				y = posY,
 				height = 3,
 				width = 6,
@@ -454,9 +466,11 @@ function createJobStartRenderer(monitor)
 			}
 		)
 
+		x = x + 7
+
 		buttonRenderer.createButton(
 			{
-				x = posX + 29,
+				x = x,
 				y = posY,
 				height = 3,
 				width = 6,
@@ -464,6 +478,19 @@ function createJobStartRenderer(monitor)
 				background = colors.lime,
 				text = "+10",
 				key = 10
+			}
+		)
+
+		buttonRenderer.createButton(
+			{
+				x = posX,
+				y = posY + 4,
+				height = 3,
+				width = 40,
+				color = colors.white,
+				background = colors.red,
+				text = "start",
+				key = "start"
 			}
 		)
 	end
@@ -494,7 +521,11 @@ function createJobStartRenderer(monitor)
 			return
 		end
 
-		os.queueEvent("job_request_set_count", state.jobRequest.count + clickedButton)
+		if (clickedButton == "start") then
+			return os.queueEvent("job_request_send")
+		end
+
+		os.queueEvent("job_request_set_count", math.max(state.jobRequest.count + clickedButton, 0))
 	end
 
 	return {
