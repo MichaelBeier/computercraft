@@ -21,8 +21,13 @@ function run(config)
 			interface.handleMouseClick(state, eventType, arg1, arg2, arg3, arg4)
 			interface.render(state)
 		elseif eventType == "mob_click" then
-			-- controllerCommunicator.sendJobRequest(arg1, "infinite")
-			state.jobRequest = arg1
+			state.jobRequest = {
+				id = arg1,
+				count = 1
+			}
+			interface.render(state)
+		elseif eventType == "job_request_set_count" then
+			state.jobRequest.count = arg1
 			interface.render(state)
 		elseif eventType == "job_request_cancel" then
 			state.jobRequest = nil
@@ -381,10 +386,10 @@ function createJobStartRenderer(monitor)
 
 	local function renderContent(state, sizeX, sizeY)
 		local selectedItem =
-			findInTable(
+			findInArray(
 			state.selectionItems,
 			function(item)
-				return item.id == state.jobRequest
+				return item.id == state.jobRequest.id
 			end
 		)
 
@@ -394,14 +399,28 @@ function createJobStartRenderer(monitor)
 
 		local remainingSizeY = sizeY - headerHeight - 2 - footerHeight - 2 - 2
 
-		local posY = math.floor((remainingSizeY - 3) / 2)
+		local posY = headerHeight + 4 + math.floor((remainingSizeY - 3) / 2)
+		local posX = math.floor((sizeX - (32 + 6)) / 2)
 
 		buttonRenderer.createButton(
 			{
-				x = 1,
+				x = posX,
 				y = posY,
 				height = 3,
-				width = 5,
+				width = 6,
+				color = colors.white,
+				background = colors.lime,
+				text = "-10",
+				key = -10
+			}
+		)
+
+		buttonRenderer.createButton(
+			{
+				x = posX + 8,
+				y = posY,
+				height = 3,
+				width = 6,
 				color = colors.white,
 				background = colors.lime,
 				text = "-1",
@@ -411,14 +430,40 @@ function createJobStartRenderer(monitor)
 
 		buttonRenderer.createButton(
 			{
-				x = 12,
+				x = posX + 16,
 				y = posY,
 				height = 3,
-				width = 5,
+				width = 6,
+				color = colors.white,
+				background = colors.black,
+				text = state.jobRequest.count,
+				key = "count"
+			}
+		)
+
+		buttonRenderer.createButton(
+			{
+				x = posX + 21,
+				y = posY,
+				height = 3,
+				width = 6,
 				color = colors.white,
 				background = colors.lime,
 				text = "+1",
 				key = 1
+			}
+		)
+
+		buttonRenderer.createButton(
+			{
+				x = posX + 29,
+				y = posY,
+				height = 3,
+				width = 6,
+				color = colors.white,
+				background = colors.lime,
+				text = "+10",
+				key = 10
 			}
 		)
 	end
@@ -442,9 +487,14 @@ function createJobStartRenderer(monitor)
 
 		if (clickedButton == "back") then
 			os.queueEvent("job_request_cancel")
+			return
 		end
 
-		printDebug(clickedButton)
+		if (clickedButton == "count") then
+			return
+		end
+
+		os.queueEvent("job_request_set_count", state.jobRequest.count + clickedButton.key)
 	end
 
 	return {
@@ -550,13 +600,18 @@ function createButtonRenderer(monitor)
 	end
 
 	local function findButton(x, y)
-		for i = 1, #buttons do
-			local button = buttons[i]
-
-			if (x >= button.startX and x <= button.endX and y >= button.startY and y <= button.endY) then
-				return button.key
+		local clickedButton =
+			findInArray(
+			buttons,
+			function(button)
+				return x >= button.startX and x <= button.endX and y >= button.startY and y <= button.endY
 			end
+		)
+
+		if (clickedButton ~= nil) then
+			return clickedButton.key
 		end
+
 		return nil
 	end
 
@@ -609,7 +664,7 @@ function printDebug(...)
 	term.redirect(originalTerminal)
 end
 
-function findInTable(haystack, fn)
+function findInArray(haystack, fn)
 	for i = 1, #haystack do
 		local item = haystack[i]
 
