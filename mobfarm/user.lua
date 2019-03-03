@@ -5,7 +5,8 @@ function run(config)
 	local state = {
 		selectionItems = {},
 		jobs = {},
-		page = 1
+		page = 1,
+		jobRequest = nil
 	}
 
 	interface.render(state)
@@ -20,7 +21,9 @@ function run(config)
 			interface.handleMouseClick(state, eventType, arg1, arg2, arg3, arg4)
 			interface.render(state)
 		elseif eventType == "mob_click" then
-			controllerCommunicator.sendJobRequest(arg1, "infinite")
+			-- controllerCommunicator.sendJobRequest(arg1, "infinite")
+			state.jobRequest = arg1
+			interface.render(state)
 		elseif eventType == "change_page" then
 			state.page = arg1
 			interface.render(state)
@@ -176,13 +179,13 @@ local headerHeight = 3
 local footerHeight = 3
 
 function createSelectionRenderer(monitor)
-	local buttons = {}
 	local minListPadding = 1
 	local buttonWidth = 16
 	local buttonSpacing = 1
 	local buttonHeight = 3
 	local pageCount = 1
 	local startPosX
+	local buttonRenderer
 
 	local renderHeader = function(state, sizeX)
 		monitor.setCursorPos(1, 1)
@@ -242,29 +245,16 @@ function createSelectionRenderer(monitor)
 
 				local colStartX = startPosX + (colIndex - 1) * (buttonWidth + buttonSpacing)
 
-				local text = string.sub(mob.name, 1, buttonWidth - 2)
-				local textLength = string.len(text)
-
-				local textStart = math.floor((buttonWidth - textLength) / 2)
-
-				local endX = colStartX + buttonWidth - 1
-				local endY = yPos + buttonHeight - 1
-
-				local buttonBackground = colors.lime
-
-				monitor.setCursorPos(colStartX, yPos)
-				drawFilledBox(monitor, colStartX, yPos, endX, endY, buttonBackground)
-				monitor.setCursorPos(colStartX + textStart, yPos + math.floor(buttonHeight / 2))
-				writeInColor(monitor, text, colors.white, buttonBackground)
-
-				table.insert(
-					buttons,
+				buttonRenderer.createButton(
 					{
-						startX = colStartX,
-						startY = yPos,
-						endX = endX,
-						endY = endY,
-						key = mob.id
+						x = colStartX,
+						y = yPos,
+						width = buttonWidth,
+						height = buttonHeight,
+						text = mob.name,
+						key = mob.name,
+						color = colors.white,
+						background = colors.lime
 					}
 				)
 			end
@@ -288,38 +278,37 @@ function createSelectionRenderer(monitor)
 		writeInColor(monitor, pageText, colors.black, colors.white)
 
 		if (state.page > 1) then
-			monitor.setCursorPos(2, startPosY + 1)
-			writeInColor(monitor, "Previous", colors.black, colors.white)
-			table.insert(
-				buttons,
+			buttonRenderer.createButton(
 				{
-					startX = 1,
-					startY = startPosY,
-					endX = 2 + string.len("Previous") + 1,
-					endY = startPosY + 2,
-					key = "previous"
+					x = 2,
+					y = startPosY,
+					width = 8 + 2,
+					height = 3,
+					key = "previous",
+					text = "Previous",
+					colors = colors.black,
+					background = colors.white
 				}
 			)
 		end
 		if (state.page < pageCount) then
-			local text = "next"
-			local textLength = string.len(text)
-			monitor.setCursorPos(sizeX - textLength - 2, startPosY + 1)
-			writeInColor(monitor, "Next", colors.black, colors.white)
-			table.insert(
-				buttons,
+			buttonRenderer.createButton(
 				{
-					startX = sizeX - textLength - 2 - 1,
-					startY = startPosY,
-					endX = sizeX - 1,
-					endY = startPosY + 2,
-					key = "next"
+					x = sizeX - textLength - 2 - 1,
+					y = startPosY,
+					width = 4 + 2,
+					height = 3,
+					key = "next",
+					background = colors.white,
+					color = colors.black,
+					text = "Next"
 				}
 			)
 		end
 	end
 
 	local render = function(state)
+		buttonRenderer = createButtonRenderer(monitor)
 		monitor.setBackgroundColor(colors.black)
 		monitor.clear()
 		local sizeX, sizeY = monitor.getSize()
@@ -330,7 +319,7 @@ function createSelectionRenderer(monitor)
 	end
 
 	local handleMouseClick = function(state, x, y)
-		local buttonKey = findButton(buttons, x, y)
+		local buttonKey = buttonRenderer.findButton(x, y)
 
 		if (buttonKey == nil) then
 			return
@@ -413,6 +402,60 @@ function createLoggerRenderer(monitor)
 	}
 end
 
+function createButtonRenderer(monitor)
+	local buttons
+
+	local function createButton(button)
+		local buttonColor = button.color ~= nil and button.color or colors.white
+		local buttonBackground = button.background ~= nil and button.background or colors.black
+
+		local endX = button.x + button.width - 1
+		local endY = button.y + button.height - 1
+
+		local maxTextWidth = button.width - 2
+		local textLen = string.len(button.text)
+
+		if (textLen > maxTextWidth) then
+			textLen = maxTextWidth
+			text = string.sub(text, 1, textLen)
+		end
+
+		local textStart = math.floor((maxTextWidth - textLen) / 2)
+
+		monitor.setCursorPos(x, y)
+		drawFilledBox(monitor, x, y, endX, endY, buttonBackground)
+		monitor.setCursorPos(button.x + textStart, button.y + math.floor(button.height / 2))
+		writeInColor(monitor, text, buttonColor, buttonBackground)
+
+		table.insert(
+			buttons,
+			{
+				startX = button.x,
+				startY = button.y,
+				endX = endX,
+				endY = endY,
+				key = key
+			}
+		)
+	end
+
+	local function findButton(x, y)
+		for i = 1, #buttons do
+			local button = buttons[i]
+
+			if (x >= button.startX and x <= button.endX and y >= button.startY and y <= button.endY) then
+				return button.key
+			end
+		end
+		return nil
+	end
+
+	return {
+		createButton = createButton,
+		findButton = findButton
+	}
+end
+
 function writeInColor(output, text, color, backgroundColor)
 	local originalColor = output.getTextColor()
 	local originalBackgroundColor = output.getBackgroundColor()
@@ -447,17 +490,6 @@ end
 function advanceLines(monitor, count)
 	local _, y = monitor.getCursorPos()
 	monitor.setCursorPos(1, y + count)
-end
-
-function findButton(buttons, x, y)
-	for i = 1, #buttons do
-		local button = buttons[i]
-
-		if (x >= button.startX and x <= button.endX and y >= button.startY and y <= button.endY) then
-			return button.key
-		end
-	end
-	return nil
 end
 
 run(
