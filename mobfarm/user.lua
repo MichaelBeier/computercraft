@@ -265,7 +265,7 @@ function createSelectionRenderer(monitor)
 						width = buttonWidth,
 						height = buttonHeight,
 						text = mob.name,
-						key = mob.name,
+						key = mob.id,
 						color = colors.white,
 						background = colors.lime
 					}
