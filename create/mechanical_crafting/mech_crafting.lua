@@ -100,11 +100,11 @@ end
 
 function hasNewOrder() 
     local contents =  orderChest.list()
-    return next(contents)
+    return tablelength(contents) > 0
 end
 
 function do_tables_match( a, b )
-    return table.concat(a) == table.concat(b)
+    return textutils.serialise(a) == textutils.serialise(b)
 end
 
 function getRecipe()
@@ -223,7 +223,7 @@ end
 
 function hasNewRecipe()
     local contents =  recipeChest.list()
-    return next(contents)
+    return tablelength(contents) > 0
 end
 
 function registerNewRecipe()
