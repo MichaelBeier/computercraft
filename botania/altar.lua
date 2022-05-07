@@ -36,13 +36,18 @@ function execute()
 		end
 	end
 
+	-- allow all items to be sucked up
+	os.sleep(3)
+
 	print("disabling vacuum")
 
 	redstone.setAnalogOutput(vacuumSide, 0)
 
 	print("pushing items to output")
 
-	vacuum.pushItems(peripheral.getName(output), 1)
+	for slot, _ in pairs(vacuum.list()) do
+		vacuum.pushItems(peripheral.getName(output), slot)
+	end
 
 	print("pulsing crafter redstone signal")
 
