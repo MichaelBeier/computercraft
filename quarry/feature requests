@@ -1,0 +1,10 @@
+- use coordinates more often to see if stuck
+- clear movement channel but care for turtles and chests
+- handle no refuel
+- on the fly enlisting of new workers
+- persist state to handle restarts
+- see if < 0 works
+- blacklist of items
+
+- "unprepared mode" -> no free space, no real movement channels yet
+- lava/water aware, destroy source blocks and fill edges
